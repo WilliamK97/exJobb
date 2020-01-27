@@ -1,3 +1,7 @@
+
+import { WebPartContext } from "@microsoft/sp-webpart-base";
+
 export interface ITwitterProps {
-  description: string;
+  description?: string;
+  context?: WebPartContext;
 }

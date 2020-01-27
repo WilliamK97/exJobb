@@ -12,7 +12,7 @@ const User = require('../../models/User');
 // GET api/users/all
 // Get all User
 // Private
-router.get('/all', auth , async (req, res) => {
+router.get('/all', async (req, res) => {
   try {
     const user = await User.find().select('-password');
     res.json(user);
