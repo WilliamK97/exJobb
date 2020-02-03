@@ -2,49 +2,38 @@ import * as React from 'react';
 import styles from './Twitter.module.scss';
 import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-import { WebPartContext } from "@microsoft/sp-webpart-base";
-import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
-import Register from "./Register";
-import { Route, Link } from 'react-router-dom';
-import HomeScreen from "./HomeScreen";
+import { Link, NavLink } from 'react-router-dom';
+import WelcomeScreen from "./WelcomeScreen";
 
-export interface ITwitterState{
+export interface ITwitterStateRegister{
   valueEmail: any;
   valuePassword: any;
   token: any;
   loginErrors: any;
-  tweet: any;
+  valueName: any;
 }
 
-export default class Login extends React.Component<ITwitterProps, ITwitterState, {}> {
-
-  constructor(props:ITwitterProps, state: ITwitterState) {
+export default class Register extends React.Component<ITwitterProps, ITwitterStateRegister, {}> {
+constructor(props:ITwitterProps, state: ITwitterStateRegister) {
     super(props);
     this.state = {
       valueEmail: '',
       valuePassword: '',
+      valueName: '',
       token: '',
-      loginErrors: '',
-      tweet: []
+      loginErrors: ''
     };
   }
-
-  // componentDidMount(){
-  //   fetch("https://local.william/api/tweets/5df1fb98bc9be001946307cd")
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     this.setState({
-  //       tweet: data
-  //     })
-  //   })
-  //   .catch((error) => {
-  //     console.log(error + " catch error clg")
-  //   })
-  // }
 
   private handleChangeEmail = (event: any):void => {
     this.setState({
         valueEmail: event.target.value
+    });
+  }
+
+  private handleChangeName = (event: any):void => {
+    this.setState({
+        valueName: event.target.value
     });
   }
 
@@ -54,14 +43,15 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
     });
   }
 
-  private handleLogin = (e: any) => {
+  private handleMakeAccount = (e: any) => {
     e.preventDefault();
-    fetch('https://local.william/api/auth', {
+    fetch('https://local.william/api/users', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+        name: this.state.valueName,
         email: this.state.valueEmail,
         password: this.state.valuePassword,
     }),
@@ -77,33 +67,30 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
     });
   }   
 
+
   public render(): React.ReactElement<ITwitterProps> {
 
-
-    // var tweet = this.state.tweet.length == 0 ? <p>Loading tweet</p> : <div>
-    //   <p>{this.state.tweet.text}</p>
-    //   <p>{this.state.tweet.name}</p>
-    //   <p>{this.state.tweet.user}</p>
-    // </div>
-
     var loginError = this.state.loginErrors.length == 0
-     ? "" 
-     : <div>{this.state.loginErrors}</div>;
+    ? "" 
+    : <div>{this.state.loginErrors}</div>;
 
-    var loginSuccess =  this.state.token == undefined || this.state.token.length == 0 || this.state.token == null 
-    ? ""
-    : <div>
-        <Link Component={HomeScreen} exact to="/home">Go to Home Screen</Link>
-      </div>;
+    var loginSuccess = this.state.token == undefined || this.state.token.length == 0 || this.state.token == null 
+    ? <div></div>
+    : <div>Success! Go to Login form to login</div>;
+
+    console.log("token: " + this.state.token);
 
     return (
       <div className={ styles.twitter }>
-        <div className={styles.loginContainer}>
-          <div>
-            <h1>Twitter</h1>
-            <p>Welcome to Twitter</p>
+        <div className={styles.RegisterContainer}>
+            <h3>Create new account</h3>
 
-            <form className={styles.loginForm} onSubmit={this.handleLogin}>
+            <form onSubmit={this.handleMakeAccount}>
+              <div className="name">
+                <div>Name</div>
+                <input type="text" name="name" value={this.state.valueName} onChange={this.handleChangeName} /> 
+              </div>
+
               <div className="email">
                 <div>Email</div>
                 <input type="text" name="email" value={this.state.valueEmail} onChange={this.handleChangeEmail} /> 
@@ -114,14 +101,11 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
                 <input type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
               </div>
               <br/>
-              <input type="submit" value="Login" />
+              <input type="submit" value="Create Account" />
             </form>
 
-            {/* {tweet} */}
             {loginError}
             {loginSuccess}
-           
-          </div>
         </div>
       </div>
     );
