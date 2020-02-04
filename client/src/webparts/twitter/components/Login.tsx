@@ -65,7 +65,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
                 token: data.token,
                 loginErrors: data.errors !== undefined ? data.errors[0].msg : ""
             });
-             {this.props.loginCallback()}
+             {this.props.loginCallback()};
         })
         .catch((error) => {
             console.error(error + " error in clg");
@@ -73,13 +73,6 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
   }  
 
   public render(): React.ReactElement<ITwitterProps> {
-
-
-    // var tweet = this.state.tweet.length == 0 ? <p>Loading tweet</p> : <div>
-    //   <p>{this.state.tweet.text}</p>
-    //   <p>{this.state.tweet.name}</p>
-    //   <p>{this.state.tweet.user}</p>
-    // </div>
 
     var loginError = this.state.loginErrors.length == 0
      ? "" 

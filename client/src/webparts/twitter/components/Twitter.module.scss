@@ -17,6 +17,18 @@
 
   .HomeScreenContainer{
     color: white;
+
+    .user{
+      color: white;
+    }
+    .tweet{
+      border: 1px solid black;
+      margin: 1rem 0;
+    }
+    .tweets{
+      width: 60%;
+      margin: 0 auto;
+    }
   }
 
   .WelcomeScreenContainer{
