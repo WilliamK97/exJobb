@@ -5,7 +5,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
 import Register from "./Register";
-import { Route, Link, BrowserRouter } from 'react-router-dom';
+import {Route, Link, BrowserRouter } from 'react-router-dom';
 import HomeScreen from "./HomeScreen";
 import WelcomeScreen from "./WelcomeScreen";
 
@@ -21,12 +21,14 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
 
   constructor(props:ITwitterProps, state: ITwitterState) {
     super(props);
-    this.state = {
+    var test = localStorage.getItem('token');
+    test == null ? <></> : this.setState({token: test})  
+    this.state = { 
       valueEmail: '',
       valuePassword: '',
       token: '',
       loginErrors: '',
-      tweet: []
+      tweet:[]
     };
   }
 
@@ -34,6 +36,10 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
     this.setState({
         valueEmail: event.target.value
     });
+  }
+
+  private clickedBtn = () => {
+    this.props.loginCallback();
   }
 
   private handleChangePassword = (event: any):void => {
@@ -59,6 +65,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
                 token: data.token,
                 loginErrors: data.errors !== undefined ? data.errors[0].msg : ""
             });
+             {this.props.loginCallback()}
         })
         .catch((error) => {
             console.error(error + " error in clg");
@@ -80,7 +87,10 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
 
     var loginSuccess =  this.state.token == undefined || this.state.token.length == 0 || this.state.token == null 
     ? ""
-    : <> {localStorage.setItem('token', this.state.token)} {console.log("token is set")} </>;
+    : <>
+        {localStorage.setItem('token', this.state.token)}
+        {console.log("token is set")}
+     </>;
 
 
     return (
@@ -99,7 +109,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
                 <input type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
               </div>
               <br/>
-              <input type="submit" value="Login" />
+              <input onClick={() => this.clickedBtn()} type="submit" value="Login" />
             </form>
 
             {loginError}

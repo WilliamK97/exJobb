@@ -9,6 +9,7 @@ import HomeScreen from "./HomeScreen";
 
 export interface ITwitterStateWelcomeScreen{
   tokenFromLocalStorage: any;
+  dummy: any;
 }
 
 export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitterStateWelcomeScreen,  {}> {
@@ -16,30 +17,38 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     constructor(props:ITwitterProps, state: ITwitterStateWelcomeScreen) {
     super(props);
     this.state = {
-      tokenFromLocalStorage: ''
+      tokenFromLocalStorage: '',
+      dummy: '',
     };
   }
 
-  public componentDidUpdate = () => {
-    console.log("did update"),
-    this.checkIfTokenExist();
+  public loginCallback = () => {
+      console.log("setting new token");
+        var getToken = localStorage.getItem('token');
+        this.setState({
+            tokenFromLocalStorage: getToken
+        });  
   }
 
-
-  public checkIfTokenExist = (): void => {
+  public componentDidMount = () => {
     var getToken = localStorage.getItem('token');
-    var tokenState = this.setState({
+    this.setState({
         tokenFromLocalStorage: getToken
-    });
+    });  
+  }
+
+  public componentDidUpdate = (prevProps, prevState) => {
+    console.log("did update");
   }
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    console.log("get token state: " + this.state.tokenFromLocalStorage);
-
     var homeScreen = this.state.tokenFromLocalStorage == null || this.state.tokenFromLocalStorage.length == 0 || this.state.tokenFromLocalStorage == undefined
     ? ""
-    : <Link Component={HomeScreen} exact to="/home">Home Page</Link>;
+    : <> 
+        <Link Component={HomeScreen} exact to="/home">Home Page!!</Link>
+        <Route exact path='/home' component={HomeScreen}/>
+      </>
 
     return (
     <BrowserRouter>
@@ -51,7 +60,7 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
             <Link Component={Register} exact to="/register">Make account</Link>
             {homeScreen}
 
-            <Route exact path='/login' component={Login}/>
+            <Route exact path='/login' render={(props) => <Login {...props} loginCallback={this.loginCallback} />} />
             <Route exact path='/register' component={Register} /> 
 
         </div>
