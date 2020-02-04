@@ -5,8 +5,9 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
 import Register from "./Register";
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, BrowserRouter } from 'react-router-dom';
 import HomeScreen from "./HomeScreen";
+import WelcomeScreen from "./WelcomeScreen";
 
 export interface ITwitterState{
   valueEmail: any;
@@ -28,19 +29,6 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
       tweet: []
     };
   }
-
-  // componentDidMount(){
-  //   fetch("https://local.william/api/tweets/5df1fb98bc9be001946307cd")
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     this.setState({
-  //       tweet: data
-  //     })
-  //   })
-  //   .catch((error) => {
-  //     console.log(error + " catch error clg")
-  //   })
-  // }
 
   private handleChangeEmail = (event: any):void => {
     this.setState({
@@ -75,7 +63,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
         .catch((error) => {
             console.error(error + " error in clg");
     });
-  }   
+  }  
 
   public render(): React.ReactElement<ITwitterProps> {
 
@@ -92,16 +80,13 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
 
     var loginSuccess =  this.state.token == undefined || this.state.token.length == 0 || this.state.token == null 
     ? ""
-    : <div>
-        <Link Component={HomeScreen} exact to="/home">Go to Home Screen</Link>
-      </div>;
+    : <> {localStorage.setItem('token', this.state.token)} {console.log("token is set")} </>;
+
 
     return (
       <div className={ styles.twitter }>
         <div className={styles.loginContainer}>
           <div>
-            <h1>Twitter</h1>
-            <p>Welcome to Twitter</p>
 
             <form className={styles.loginForm} onSubmit={this.handleLogin}>
               <div className="email">
@@ -117,7 +102,6 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
               <input type="submit" value="Login" />
             </form>
 
-            {/* {tweet} */}
             {loginError}
             {loginSuccess}
            

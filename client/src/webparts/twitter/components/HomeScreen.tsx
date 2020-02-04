@@ -5,7 +5,6 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import Login from "./Login";
 import Register from "./Register";
 import { Link, NavLink } from 'react-router-dom';
-import WelcomeScreen from "./WelcomeScreen";
 
 export default class HomeScreen extends React.Component<ITwitterProps, {}> {
   public render(): React.ReactElement<ITwitterProps> {
@@ -13,7 +12,6 @@ export default class HomeScreen extends React.Component<ITwitterProps, {}> {
       <div className={ styles.twitter }>
         <div className={styles.HomeScreenContainer}>
             <p> this is the home page</p>
-            <Link Component={WelcomeScreen} to="/">Back to Welcome page</Link>
         </div>
       </div>
     );
