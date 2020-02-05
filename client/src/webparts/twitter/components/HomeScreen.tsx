@@ -109,8 +109,8 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
     var user = this.state.user == null || this.state.user == undefined
     ? <p>Loading User</p>
     : <div className={styles.user}>
-        <h1>Hi {this.state.user.name}</h1>
         <img className={styles.userImg} src={this.state.user.avatar} />
+        <h2>Hi {this.state.user.name}</h2>
         <p>{this.state.user.email}</p>
         {/* <p>Followers: {this.state.user.followers.length == undefined ? <p>0 followers</p> : this.state.user.followers.length} </p> */}
         {/* <p>Following: {this.state.user.following.length}</p>  */}
@@ -128,7 +128,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
                 <hr />
                 <p className={styles.text}>{item.text}</p>
                 <span><FaRegHeart className={styles.likeButton} onClick={() => this.likeTweet(item._id)}/><span className={styles.numberOfLikes}>{item.likes.length}</span></span>
-                <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /></span>
+                <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /><span className={styles.numberOfLikes}>{item.comments.length}</span></span>
                 <span style={this.state.showCommentInput == true ? {display:'inline-block'} : {display: 'none'}}>
                     <input className={styles.commentInput} type="text" placeholder="New comment" />
                     <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />

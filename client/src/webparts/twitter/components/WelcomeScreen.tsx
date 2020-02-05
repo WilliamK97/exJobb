@@ -6,6 +6,7 @@ import Login from "./Login";
 import Register from "./Register";
 import { Route, BrowserRouter, Link } from 'react-router-dom';
 import HomeScreen from "./HomeScreen";
+import Search from "./Search";
 
 export interface ITwitterStateWelcomeScreen{
   tokenFromLocalStorage: any;
@@ -23,11 +24,11 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
   }
 
   public loginCallback = () => {
-      console.log("setting new token");
-        var getToken = localStorage.getItem('token');
-        this.setState({
-            tokenFromLocalStorage: getToken
-        });  
+    console.log("setting new token");
+    var getToken = localStorage.getItem('token');
+    this.setState({
+        tokenFromLocalStorage: getToken
+    });  
   }
 
   public componentDidMount = () => {
@@ -41,27 +42,42 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     console.log("did update");
   }
 
+  private logout = () => {
+      this.setState({
+          tokenFromLocalStorage: ''
+      })
+
+      localStorage.removeItem('token');
+      console.log("logout")
+  }
+
   public render(): React.ReactElement<ITwitterProps> {
 
     var homeScreen = this.state.tokenFromLocalStorage == null || this.state.tokenFromLocalStorage.length == 0 || this.state.tokenFromLocalStorage == undefined
-    ? ""
+    ? <>
+        <Link Component={Login} exact to="/login">Login</Link>
+        <Link Component={Register} exact to="/register">Create account</Link>
+
+        <Route exact path='/login' render={(props) => <Login {...props} loginCallback={this.loginCallback} />} />
+        <Route exact path='/register' component={Register} /> 
+      </>
     : <> 
         <Link Component={HomeScreen} exact to="/home">Home</Link>
+        <Link Component={Search} exact to="/search">Search</Link>
+        <input onClick={this.logout} className={styles.logout} type="button" value="Logout" />
+
         <Route exact path='/home' component={HomeScreen}/>
+        <Route exact path='/search' component={Search}/>
       </>
+
+
 
     return (
     <BrowserRouter>
       <div className={ styles.twitter }>
         <div className={styles.WelcomeScreenContainer}>
             <h1>Welcome to Twitter</h1>
-
-            <Link Component={Login} exact to="/login">Login</Link>
-            <Link Component={Register} exact to="/register">Create account</Link>
             {homeScreen}
-
-            <Route exact path='/login' render={(props) => <Login {...props} loginCallback={this.loginCallback} />} />
-            <Route exact path='/register' component={Register} /> 
 
         </div>
       </div>

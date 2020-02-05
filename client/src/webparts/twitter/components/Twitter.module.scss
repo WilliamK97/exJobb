@@ -57,11 +57,19 @@
     }
 
     .user{
-      color: white;
+      color: gray;
+      background-color: white;
+      border-radius: 20px;
+      width: 85%;
+      margin: 1rem auto 0 auto;
+      padding: 1rem 0;
+
 
       .userImg{
         width: 12%;
         border-radius: 50%;
+        padding: 8px;
+        background-color: rgb(29,161,242);
       } 
     }
 
@@ -103,6 +111,7 @@
         position: relative;
         top: -7px;
         left: 3px;
+        color: gray;
       }
       .commentButton{
         color: gray;
@@ -151,7 +160,7 @@
     }
 
     a{
-      color: black;
+      color: gray;
       text-decoration: none;
       padding: 5px;
       background-color: white;
@@ -159,6 +168,18 @@
       font-size: 1rem;
       padding: 5px 10px;
       border-radius: 12px;
+    }
+
+    .logout{
+      color: gray;
+      text-decoration: none;
+      padding: 5px;
+      background-color: white;
+      margin: 0 5px 0 5px;
+      font-size: 1rem;
+      padding: 5px 10px;
+      border-radius: 12px;
+      border: none;
     }
 
   }
@@ -197,6 +218,61 @@
 
     .errorMsg{
       color: red;
+    }
+
+  }
+  ///// SEARCH /////
+  .searchComponent{
+    color: white;
+
+    .searchInput{
+      width: 38%;
+      margin-bottom: 1rem;
+      height: 2rem;
+      border-radius: 12px;
+      border: none;
+      padding-left: 2%;
+    }
+    .searchButton{
+      width: 25%;
+      height: 2rem;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .allUsers{
+      color: white;
+    }
+    .oneUser{
+      color: gray;
+      width: 50%;
+      border-radius: 15px;
+      background-color: white;
+      margin: 0.5rem auto;
+      padding: 8px 0;
+      text-align: left;
+    }
+    .allUsersImg{
+      width: 12%;
+      border-radius: 50%;
+      margin-left: 1rem;
+    }
+    .allUserNames{
+      position: relative;
+      top: -10px;
+      left: 10px;
+      font-weight: 600;
+    }
+    .followUser{
+      color:white;
+      background-color: rgb(29,161,242);
+      border-radius: 12px;
+      padding: 5px;
+      border: none;
+      float: right;
+      margin: 5px 10px 0 0;
     }
 
   }
