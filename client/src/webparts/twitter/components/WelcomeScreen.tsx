@@ -46,7 +46,7 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     var homeScreen = this.state.tokenFromLocalStorage == null || this.state.tokenFromLocalStorage.length == 0 || this.state.tokenFromLocalStorage == undefined
     ? ""
     : <> 
-        <Link Component={HomeScreen} exact to="/home">Home Page!!</Link>
+        <Link Component={HomeScreen} exact to="/home">Home</Link>
         <Route exact path='/home' component={HomeScreen}/>
       </>
 
@@ -57,7 +57,7 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
             <h1>Welcome to Twitter</h1>
 
             <Link Component={Login} exact to="/login">Login</Link>
-            <Link Component={Register} exact to="/register">Make account</Link>
+            <Link Component={Register} exact to="/register">Create account</Link>
             {homeScreen}
 
             <Route exact path='/login' render={(props) => <Login {...props} loginCallback={this.loginCallback} />} />

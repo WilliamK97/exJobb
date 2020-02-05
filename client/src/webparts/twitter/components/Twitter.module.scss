@@ -11,30 +11,144 @@
     color: white;
   }
 
+  ///// CREATE ACCOUNT /////
   .RegisterContainer{
     color: white;
+    width: 80%;
+    margin: 0px auto;
+    text-align: center;
+
+    .registerInput{
+      width: 38%;
+      margin-bottom: 1rem;
+      height: 2rem;
+      border-radius: 12px;
+      border: none;
+      padding-left: 2%;
+    }
+    input[type=submit]{
+      width: 25%;
+      height: 2rem;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .loginErrorMsg{
+      width: 50%;
+      margin: 1rem auto;
+      border: 1px solid white;
+      padding: 8px 1px;
+    }
+    .loginSuccessMsg{
+      width: 50%;
+      margin: 1rem auto;
+      border: 1px solid white;
+      padding: 8px 1px;
+    }
   }
 
+  ///// HOME SCREEN /////
   .HomeScreenContainer{
     color: white;
 
-    .user{
+    .loadingTweets{
       color: white;
     }
-    .tweet{
-      border: 1px solid black;
-      margin: 1rem 0;
+
+    .user{
+      color: white;
+
+      .userImg{
+        width: 12%;
+        border-radius: 50%;
+      } 
     }
+
+    .tweet{
+      padding: 5%;
+      margin: 1rem auto;
+      background-color: #fff;
+      border-radius: 20px;
+      border: none;
+      width: 95%;
+      text-align: left;
+
+      .img{
+        float: left;
+        width: 12%;
+        border-radius: 50%;
+      }
+      .name{
+        margin-left: 0.8rem;
+      }
+      .text{
+        margin: 25px 0px;
+      }
+      .userName{
+        margin-left: 0.8rem;
+        font-weight: 600;
+      }
+      .date{
+        float: right;
+        margin-top: 4px;
+        color: gray;
+      }
+      .likeButton{
+        color: gray;
+        width: 25px;
+        height: 25px;
+      }
+      .numberOfLikes{
+        position: relative;
+        top: -7px;
+        left: 3px;
+      }
+      .commentButton{
+        color: gray;
+        width: 25px;
+        height: 25px;
+        margin-left: 1rem;
+      }
+      .closeButton{
+        color: gray;
+        width: 20px;
+        height: 20px;
+        margin-left: 8px;
+        margin-bottom: 1.2px;
+      }
+
+      .commentInput{
+        color: #000;
+        position: relative;
+        top: -6px;
+        left: 5px;
+        border-radius: 10px;
+        border: 1px solid rgb(29,161,242);
+        outline: none;
+        padding-left: 8px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        width: 70%;
+      }
+    }
+    
     .tweets{
       width: 60%;
       margin: 0 auto;
+      color: black;
     }
   }
 
+  ///// WELCOME SCREEN /////
   .WelcomeScreenContainer{
     width: 80%;
     margin: 0px auto;
     text-align: center;
+
+    h1{
+      font-size: 3rem;
+    }
 
     a{
       color: black;
@@ -42,10 +156,14 @@
       padding: 5px;
       background-color: white;
       margin: 0 5px 0 5px;
+      font-size: 1rem;
+      padding: 5px 10px;
+      border-radius: 12px;
     }
 
   }
 
+  ///// LOGIN /////
   .loginContainer {
     width: 80%;
     margin: 0px auto;
@@ -53,6 +171,24 @@
 
     .loginForm{
       padding-bottom: 1rem;
+
+      input[type=submit]{
+        width: 20%;
+        height: 2rem;
+        border-radius: 30px;
+        border: none;
+        font-weight: 600;
+      }
+
+      .loginInput{
+        width: 38%;
+        margin-bottom: 1rem;
+        height: 2rem;
+        border-radius: 30px;
+        border: none;
+        padding-left: 2%;
+      }
+
     }
 
     .email{

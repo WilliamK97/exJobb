@@ -92,14 +92,14 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
           <div>
 
             <form className={styles.loginForm} onSubmit={this.handleLogin}>
-              <div className="email">
+              <div>
                 <div>Email</div>
-                <input type="text" name="email" value={this.state.valueEmail} onChange={this.handleChangeEmail} /> 
+                <input className={styles.loginInput} type="text" name="email" value={this.state.valueEmail} onChange={this.handleChangeEmail} /> 
               </div>
 
-              <div className="password">
+              <div>
                 <div>Password</div>
-                <input type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
+                <input className={styles.loginInput} type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
               </div>
               <br/>
               <input onClick={() => this.clickedBtn()} type="submit" value="Login" />

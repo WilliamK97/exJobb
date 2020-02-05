@@ -72,40 +72,40 @@ constructor(props:ITwitterProps, state: ITwitterStateRegister) {
 
     var loginError = this.state.loginErrors.length == 0
     ? "" 
-    : <div>{this.state.loginErrors}</div>;
+    : <div className={styles.loginErrorMsg}>{this.state.loginErrors}</div>;
 
     var loginSuccess = this.state.token == undefined || this.state.token.length == 0 || this.state.token == null 
     ? <div></div>
-    : <div>Success! Go to Login form to login</div>;
+    : <div className={styles.loginSuccessMsg}>Success!</div>;
 
     console.log("token: " + this.state.token);
 
     return (
       <div className={ styles.twitter }>
         <div className={styles.RegisterContainer}>
-            <h3>Create new account</h3>
+
+        {loginError}
+        {loginSuccess}
 
             <form onSubmit={this.handleMakeAccount}>
               <div className="name">
                 <div>Name</div>
-                <input type="text" name="name" value={this.state.valueName} onChange={this.handleChangeName} /> 
+                <input className={styles.registerInput} type="text" name="name" value={this.state.valueName} onChange={this.handleChangeName} /> 
               </div>
 
               <div className="email">
                 <div>Email</div>
-                <input type="text" name="email" value={this.state.valueEmail} onChange={this.handleChangeEmail} /> 
+                <input className={styles.registerInput} type="text" name="email" value={this.state.valueEmail} onChange={this.handleChangeEmail} /> 
               </div>
 
               <div className="password">
                 <div>Password</div>
-                <input type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
+                <input className={styles.registerInput} type="password" name="pw" value={this.state.valuePassword} onChange={this.handleChangePassword} />  
               </div>
               <br/>
               <input type="submit" value="Create Account" />
             </form>
-
-            {loginError}
-            {loginSuccess}
+    
         </div>
       </div>
     );
