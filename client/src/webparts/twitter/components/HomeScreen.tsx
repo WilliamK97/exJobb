@@ -125,6 +125,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
                 <img className={styles.img} src={item.avatar} />
                 <span className={styles.name}>{item.name}</span><br/>
                 <span className={styles.userName}>@{item.name}</span><br />
+                {/* <img src="twitter.png" className={styles.twitterLogo} /> */}
                 <hr />
                 <p className={styles.text}>{item.text}</p>
                 <span><FaRegHeart className={styles.likeButton} onClick={() => this.likeTweet(item._id)}/><span className={styles.numberOfLikes}>{item.likes.length}</span></span>
