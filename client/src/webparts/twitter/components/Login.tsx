@@ -22,7 +22,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
   constructor(props:ITwitterProps, state: ITwitterState) {
     super(props);
     var test = localStorage.getItem('token');
-    test == null ? <></> : this.setState({token: test})  
+    test == null ? <></> : this.setState({token: test}); 
     this.state = { 
       valueEmail: '',
       valuePassword: '',
@@ -65,7 +65,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
                 token: data.token,
                 loginErrors: data.errors !== undefined ? data.errors[0].msg : ""
             });
-             {this.props.loginCallback()};
+             {this.props.loginCallback()}
         })
         .catch((error) => {
             console.error(error + " error in clg");

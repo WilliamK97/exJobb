@@ -82,6 +82,31 @@
       width: 95%;
       text-align: left;
 
+      .commentSection{
+        background-color: #1da1f2;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        color: #fff;
+        width: 90%;
+        margin: 1rem auto;
+
+        .commentName{
+          position: relative;
+          top: -11px;
+          left: 5px;
+          font-weight: 600;
+        }
+
+        .commentText{
+          color: white;
+        }
+
+        img{
+          width: 9%;
+          border-radius: 50%;
+        }
+      }
+
       .img{
         float: left;
         width: 12%;
@@ -102,13 +127,22 @@
       }
       .date{
         float: right;
-        margin-top: 4px;
-        color: gray;
+        margin-top: 7px;
+        color: grey;
+        font-size: 0.7rem;
       }
       .likeButton{
         color: gray;
         width: 25px;
         height: 25px;
+        cursor: pointer;
+      }
+      .unLikeButton{
+        color: gray;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        fill: red;
       }
       .numberOfLikes{
         position: relative;
@@ -121,23 +155,31 @@
         width: 25px;
         height: 25px;
         margin-left: 1rem;
+        cursor: pointer;
       }
       .closeButton{
         color: gray;
         width: 20px;
         height: 20px;
-        margin-left: 8px;
+        margin-left: 10px;
         margin-bottom: 1.2px;
+      }
+      .submitComment{
+        color: green;
+        position: absolute;
+        top: 3px;
+        left: 133px;
+        cursor: pointer;
       }
 
       .commentInput{
         color: #000;
         position: relative;
         top: -6px;
-        left: 5px;
+        left: 8px;
         border-radius: 10px;
-        border: 1px solid rgb(29,161,242);
-        outline: none;
+        border: 1px solid gray;
+        outline: 0;
         padding-left: 8px;
         padding-top: 1px;
         padding-bottom: 1px;
@@ -293,5 +335,86 @@
     }
 
   }
+  ///// PROFILE /////
+  .ProfileContainer{
+    color: white;
+
+    .tweetForm{
+      border-radius: 20px;
+      margin: 1rem auto;
+      width: 50%;
+      padding: 1rem;
+
+      h4{
+        color: white;
+        margin: 0;
+      }
+
+      .tweetInput{
+        color: #000;
+        border: none;
+        height: 2rem;
+        border-radius: 20px;
+        margin-top: 1rem;
+        width: 16rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .submitButton{
+          color: grey;
+          text-decoration: none;
+          background-color: #fff;
+          margin: 0 5px;
+          font-size: 1rem;
+          padding: 5px 10px;
+          border-radius: 12px;
+          border: none;
+      }
+    }
+
+    .yourTweets{
+      padding: 3%;
+      margin: 1rem auto;
+      background-color: #fff;
+      border-radius: 20px;
+      border: none;
+      width: 58%;
+      text-align: left;
+      color: grey;
+
+      .img{
+        float: left;
+        width: 12%;
+        border-radius: 50%;
+      }
+      .name{
+        margin-left: 0.8rem;
+      }
+      .text{
+        margin: 25px 0px;
+      }
+    }
+
+    .user{
+      color: gray;
+      background-color: white;
+      border-radius: 20px;
+      width: 85%;
+      margin: 1rem auto 0 auto;
+      padding: 1rem 0;
+
+      .userImg{
+      width: 12%;
+      border-radius: 50%;
+      padding: 8px;
+      background-color: rgb(29,161,242);
+      } 
+      
+    }
+    
+  }
+
+
 
 }

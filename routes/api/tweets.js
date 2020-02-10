@@ -74,6 +74,19 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// GET api/tweets/all
+// Get all tweets
+// Private
+router.get('/all', async (req, res) => {
+  try {
+    const tweets = await Tweet.find();
+    res.json(tweets);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // GET api/tweets/:id
 // Get tweet by ID
 // Private

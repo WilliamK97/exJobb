@@ -42,6 +42,11 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     this.getLoggedInUser();
   }
 
+  public componentDidUpdate = () => {
+    console.log("component did update.. searchfilter state: ");
+    console.log(this.state.searchFilter);
+  }
+
   // om current logged in id är lika med någon users followes id så ska det stå unfollow
   private getLoggedInUser = () => {
     fetch('https://local.william/api/auth', {
@@ -52,33 +57,38 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }).then((response) => response.json())
         .then((data) => {
         this.setState({
-                loggedInUser: data
+              loggedInUser: data
             });
         })
         .catch((error) => {
-            console.error(error + " error in getLoggedInUser()");
+          console.error(error + " error in getLoggedInUser()");
     });
   }
 
-  private getAllUsers = () => {
-    fetch('https://local.william/api/users/all', {
+  private getAllUsers = async () => {
+      let result;
+      await fetch('https://local.william/api/users/all', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
     }
     }).then((response) => response.json())
         .then((data) => {
+          console.log(2);
+          console.log('response from users/all', data);
         this.setState({
                 allUsers: data,
                 searchFilter: data
             });
+            result = data;
         })
         .catch((error) => {
             console.error(error + " error in getAllUser()");
     });
+    return result;
   }
 
-  handleSearch = (e) => {
+  public handleSearch = (e) => {
     e.preventDefault();
     const search = this.state.searchValue;
 
@@ -89,7 +99,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     } else {
         this.setState({
             searchFilter: this.state.allUsers
-        })
+        });
     }
   }
 
@@ -104,9 +114,13 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }
     }).then((response) => response.json())
         .then((data) => {
-        this.setState({
+          console.log('hej from followUser()', data);
+          this.getAllUsers().then(() => {
+            console.log("fetched new users from followUser()");
+            this.setState({
                 followUserMsg: data
             });
+          });  
         })
         .catch((error) => {
             console.error(error + " error in followUser()");
@@ -123,9 +137,16 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }
     }).then((response) => response.json())
         .then((data) => {
-        this.setState({
+          console.log(1);
+         
+          this.getAllUsers().then(() => {
+            console.log(3);
+            console.log(this.state.searchFilter);
+            this.setState({
                 unFollowUserMsg: data
             });
+          });
+          
         })
         .catch((error) => {
             console.error(error + " error in unFollowUser()");
@@ -134,26 +155,11 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    //get all id´s from users followes
-    var idArray = [];
-    var getAllIdsFromAllUsersFollowers = this.state.allUsers.map(item => {
-      return item.followers.map(id => {
-        return idArray.push(id.user)
-      })
-    })
-
-    //filter currrentUsersfollowing
-    var filterCurrentUsersFollowing = idArray.filter(id => {
-      return id == this.state.loggedInUser._id
-    })
-
-
     var renderSearchedUsersOrAllUsers = this.state.searchFilter == null || this.state.searchFilter.length == 0 || this.state.searchFilter == undefined 
     ? <p>Loading all users </p>
     : this.state.searchFilter.map((item) => {
         return (
             <div className={styles.oneUser}>
-              {/* <p>{item.avatar}</p> */}
               <img className={styles.allUsersImg} src={item.avatar} />
               <span className={styles.allUserNames}>{item.name}</span>
               
@@ -161,8 +167,8 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
 
             </div>
-        )
-    })
+        );
+    });
 
     return (
       <div className={ styles.twitter }>

@@ -7,6 +7,7 @@ import Register from "./Register";
 import { Route, BrowserRouter, Link } from 'react-router-dom';
 import HomeScreen from "./HomeScreen";
 import Search from "./Search";
+import Profile from "./Profile";
 
 export interface ITwitterStateWelcomeScreen{
   tokenFromLocalStorage: any;
@@ -45,10 +46,10 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
   private logout = () => {
       this.setState({
           tokenFromLocalStorage: ''
-      })
+      });
 
       localStorage.removeItem('token');
-      console.log("logout")
+      console.log("logout");
   }
 
   public render(): React.ReactElement<ITwitterProps> {
@@ -64,11 +65,13 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     : <> 
         <Link Component={HomeScreen} exact to="/home">Home</Link>
         <Link Component={Search} exact to="/search">Search</Link>
+        <Link Component={Profile} exact to="/profile">Profile</Link>
         <input onClick={this.logout} className={styles.logout} type="button" value="Logout" />
 
         <Route exact path='/home' component={HomeScreen}/>
         <Route exact path='/search' component={Search}/>
-      </>
+        <Route exact path='/profile' component={Profile}/>
+      </>;
 
 
 

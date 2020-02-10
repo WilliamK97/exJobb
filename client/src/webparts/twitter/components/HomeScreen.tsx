@@ -5,14 +5,19 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { Link, NavLink } from 'react-router-dom';
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import {FaRegCheckCircle} from "react-icons/fa";
 
 export interface ITwitterStateHomeScreen{
     token: any;
     user: any;
     tweets: any;
     likeInfo: any;
+    unLikeInfo: any;
     showCommentInput: any;
     isTweetLiked: any;
+    commentValue: any;
+    newCommentInfo: any;
+    openComments: any;
 }
 
 export default class HomeScreen extends React.Component<ITwitterProps, ITwitterStateHomeScreen,  {}> {
@@ -25,8 +30,12 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
         user: {},
         tweets: [],
         likeInfo: {},
+        unLikeInfo: {},
         showCommentInput: false,
-        isTweetLiked: ''
+        isTweetLiked: '',
+        commentValue: '',
+        newCommentInfo: [],
+        openComments: []
     };
   }
 
@@ -39,14 +48,20 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
       console.log(id);
       this.setState({
           showCommentInput: true
-    })
+    });
   } 
 
   public hideCommentInput = (id: any) => {
       console.log(id);
       this.setState({
           showCommentInput: false
-    })
+    });
+  }
+
+  private handleChangeComment = (event: any):void => {
+    this.setState({
+        commentValue: event.target.value
+    });
   }
 
   private getUser = () => {
@@ -66,8 +81,9 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
     });
   }
 
-  private fetchTweetsFromPeopleYouFollow = () => {
-    fetch('https://local.william/api/tweets', {
+  private fetchTweetsFromPeopleYouFollow = async () => {
+    let result;
+    await fetch('https://local.william/api/tweets', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -77,10 +93,12 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
         this.setState({
                 tweets: data
             });
+            result = data;
         })
         .catch((error) => {
             console.error(error + " error in fetchTweetsFromPeopleYouFollow()");
     });
+    return result;
   }
 
   private likeTweet = (id:any):void => {
@@ -91,30 +109,75 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
         }
         }).then((response) => response.json())
             .then((data) => {
-            this.setState({
+            console.log('hej from likeTweet()', data);
+            this.fetchTweetsFromPeopleYouFollow().then(() => {
+              console.log("fetched new tweets from liketweet()")
+              this.setState({
                 likeInfo: data
             });
+            })    
         })
         .catch((error) => {
             console.error(error + " error in likeTweet()");
     });
   }
 
+  private unLikeTweet = (id:any):void => {
+      fetch('https://local.william/api/tweets/unlike/' + id , {
+          method: 'PUT',
+          headers: {
+            'x-auth-token': this.state.token
+        }
+        }).then((response) => response.json())
+            .then((data) => {
+            console.log('hej from unLikeTweet()', data);
+            this.fetchTweetsFromPeopleYouFollow().then(() => {
+              console.log("fetched new tweets from unLiketweet()")
+              this.setState({
+                unLikeInfo: data
+            });
+            })    
+        })
+        .catch((error) => {
+            console.error(error + " error in unLikeTweet()");
+    });
+  }
+
+  private commentOnTweet = (id: any):void => {
+    fetch('https://local.william/api/tweets/comment/' + id , {
+      method: 'POST',
+      headers: {
+        'x-auth-token': this.state.token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: this.state.commentValue
+    }),
+    }).then((res) => res.json())
+    .then((data) => {
+      console.log('hej from commentOnTweet()', data);
+      this.fetchTweetsFromPeopleYouFollow().then(() => {
+        console.log("fetched new tweets from commentOnTweet()")
+        this.setState({
+                newCommentInfo: data
+            });
+      })
+    })
+    .catch((err) => {
+      console.log(err + "error in commentOnTweet()")
+    })
+  } 
+
   public render(): React.ReactElement<ITwitterProps> {
 
-    console.log(this.state.likeInfo.msg);
-    console.log(this.state.user.following);
-
+    console.log(this.state.commentValue);
 
     var user = this.state.user == null || this.state.user == undefined
     ? <p>Loading User</p>
     : <div className={styles.user}>
         <img className={styles.userImg} src={this.state.user.avatar} />
         <h2>Hi {this.state.user.name}</h2>
-        <p>{this.state.user.email}</p>
-        {/* <p>Followers: {this.state.user.followers.length == undefined ? <p>0 followers</p> : this.state.user.followers.length} </p> */}
-        {/* <p>Following: {this.state.user.following.length}</p>  */}
-    </div>
+    </div>;
 
     var tweets = this.state.tweets == null || this.state.tweets == undefined || this.state.tweets.length == 0
     ? <h4 className={styles.loadingTweets}>Loading tweets</h4>
@@ -125,16 +188,25 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
                 <img className={styles.img} src={item.avatar} />
                 <span className={styles.name}>{item.name}</span><br/>
                 <span className={styles.userName}>@{item.name}</span><br />
-                {/* <img src="twitter.png" className={styles.twitterLogo} /> */}
                 <hr />
                 <p className={styles.text}>{item.text}</p>
-                <span><FaRegHeart className={styles.likeButton} onClick={() => this.likeTweet(item._id)}/><span className={styles.numberOfLikes}>{item.likes.length}</span></span>
+                <span>
+                  {item.likes.find(id => id.user == this.state.user._id) ? <span><FaRegHeart className={styles.unLikeButton} onClick={() => this.unLikeTweet(item._id)}/></span> : <span><FaRegHeart className={styles.likeButton} onClick={() => this.likeTweet(item._id)}/></span>} 
+                  <span className={styles.numberOfLikes}>{item.likes.length}</span>
+                </span>
                 <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /><span className={styles.numberOfLikes}>{item.comments.length}</span></span>
-                <span style={this.state.showCommentInput == true ? {display:'inline-block'} : {display: 'none'}}>
-                    <input className={styles.commentInput} type="text" placeholder="New comment" />
+                <span style={this.state.showCommentInput == true ? {display:'inline-block', position: "relative"} : {display: 'none'}}>
+                    <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
                     <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
+                    {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }
                 </span>
                 <span className={styles.date}>{item.date.slice(0,10)}</span>
+
+
+                {/* ////////////////comment section//////////////// */}
+                <div style={this.state.showCommentInput == true ? {display:'block'} : {display: 'none'}}>
+                  {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
+                </div>
             </div>
             );
         });
