@@ -1,6 +1,4 @@
 profile page where u can write a bio
-man ska inte se follow or onfollow knappen på sig själv 
-när man öppnar comments på en tweet ska det inte öppnas på alla
 när man skiver en comment ska det inte komma upp i alla andra comment inputs
 
 

@@ -79,7 +79,7 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     <BrowserRouter>
       <div className={ styles.twitter }>
         <div className={styles.WelcomeScreenContainer}>
-            <h1>Welcome to Twitter</h1>
+            <h1>Welcome to Fnitter</h1>
             {homeScreen}
 
         </div>

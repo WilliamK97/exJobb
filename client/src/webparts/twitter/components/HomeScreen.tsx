@@ -18,6 +18,7 @@ export interface ITwitterStateHomeScreen{
     commentValue: any;
     newCommentInfo: any;
     openComments: any;
+    displayArray: any;
 }
 
 export default class HomeScreen extends React.Component<ITwitterProps, ITwitterStateHomeScreen,  {}> {
@@ -35,7 +36,8 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
         isTweetLiked: '',
         commentValue: '',
         newCommentInfo: [],
-        openComments: []
+        openComments: [],
+        displayArray: [1]
     };
   }
 
@@ -46,16 +48,22 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
 
   public displayCommentInput = (id: any) => {
       console.log(id);
+      var tweetId = id
+      this.state.displayArray.push(tweetId);
+      console.log(this.state.displayArray)
       this.setState({
-          showCommentInput: true
     });
   } 
 
   public hideCommentInput = (id: any) => {
-      console.log(id);
+      console.log("clicked id ",id);
+      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id)
+      console.log("find array index of id")
+      console.log(indexInTweetArray)
+      this.state.displayArray.splice(indexInTweetArray);
       this.setState({
-          showCommentInput: false
     });
+    console.log(this.state.displayArray)
   }
 
   private handleChangeComment = (event: any):void => {
@@ -195,7 +203,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
                   <span className={styles.numberOfLikes}>{item.likes.length}</span>
                 </span>
                 <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /><span className={styles.numberOfLikes}>{item.comments.length}</span></span>
-                <span style={this.state.showCommentInput == true ? {display:'inline-block', position: "relative"} : {display: 'none'}}>
+                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative"} : {display: 'none'}}>
                     <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
                     <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
                     {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }
@@ -204,7 +212,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
 
 
                 {/* ////////////////comment section//////////////// */}
-                <div style={this.state.showCommentInput == true ? {display:'block'} : {display: 'none'}}>
+                <div style={this.state.displayArray.find(id => id == item._id) ? {display:'block'} : {display: 'none'}}>
                   {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
                 </div>
             </div>

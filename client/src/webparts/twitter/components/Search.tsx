@@ -159,13 +159,12 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     ? <p>Loading all users </p>
     : this.state.searchFilter.map((item) => {
         return (
-            <div className={styles.oneUser}>
+            <div style={this.state.loggedInUser._id == item._id ? {display:'none'} : {display:'block'}}>
+              <div className={styles.oneUser}>
               <img className={styles.allUsersImg} src={item.avatar} />
-              <span className={styles.allUserNames}>{item.name}</span>
-              
+              <span className={styles.allUserNames}>{item.name}</span>    
               {item.followers.find(id => id.user == this.state.loggedInUser._id) ? <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
-
-
+              </div>
             </div>
         );
     });

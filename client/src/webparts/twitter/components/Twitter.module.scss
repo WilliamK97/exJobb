@@ -383,6 +383,10 @@
       text-align: left;
       color: grey;
 
+      .date{
+        color: grey;
+        float: right;
+      }
       .img{
         float: left;
         width: 12%;
@@ -393,6 +397,21 @@
       }
       .text{
         margin: 25px 0px;
+      }
+      .likeButton{
+        width: 25px;
+        height: 25px;
+      }
+      .numberOfLikes{
+        color: gray;
+        position: relative;
+        top: -6px;
+        left: 2px;
+      }
+      .commentButton{
+        width: 25px;
+        height: 25px;
+        margin-left: 10px;
       }
     }
 

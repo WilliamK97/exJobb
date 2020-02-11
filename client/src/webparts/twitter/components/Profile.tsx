@@ -2,6 +2,9 @@ import * as React from 'react';
 import styles from './Twitter.module.scss';
 import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import { FaRegComment, FaRegHeart } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import {FaRegCheckCircle} from "react-icons/fa";
 
 export interface ITwitterStateProfileScreen{
     token: any;
@@ -29,10 +32,6 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         valueTweet: '',
         tweet: {},
         allTweets: [],
-        //bio: {},
-        //errorMsg: ''
-        //filter all tweets så den senaste är högst upp
-        // searchFilter: (list) => list.filter(a => Date.parse(a.SlutDatum) >= Date.now()),
     };
   }
 
@@ -142,6 +141,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
     console.log("tweet u created", this.state.tweet);
     console.log("valueTweet", this.state.valueTweet);
     console.log("current user", this.state.user);
+    console.log("all tweets", this.state.allTweets);
 
     // var renderProfileBio = this.state.bio == null || this.state.bio == undefined
     // ? <p>Loading bio</p> 
@@ -165,8 +165,15 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         return item.user == this.state.user._id
         ?   <div className={styles.yourTweets}>
                 <img className={styles.img} src={item.avatar} />
-                <span className={styles.name}>{item.name}</span><br/>
-                <p className={styles.text}>{item.text}</p>
+                <span className={styles.name}>{item.name}</span><br/><br/><hr/>
+                <p className={styles.text}>{item.text}</p><br />
+                <span>
+                    <FaRegHeart className={styles.likeButton}/>
+                    <span className={styles.numberOfLikes}>{item.likes.length}</span>
+                    <FaRegComment className={styles.commentButton}/>
+                    <span className={styles.numberOfLikes}>{item.comments.length}</span>
+                </span>
+                <span className={styles.date}>{item.date.slice(0,10)}</span>
             </div>
         : console.log("inte din tweet");
     });
@@ -178,8 +185,6 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         <div className={styles.ProfileContainer}>
             <hr />
             {user}
-
-            {/* {renderProfileBio} */}
 
             <form className={styles.tweetForm} onSubmit={this.createTweet}>
               <div>
