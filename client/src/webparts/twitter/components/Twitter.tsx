@@ -4,6 +4,7 @@ import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import Login from "./Login";
 import WelcomeScreen from "./WelcomeScreen";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default class Twitter extends React.Component<ITwitterProps, {}> {

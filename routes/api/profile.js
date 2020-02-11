@@ -19,7 +19,7 @@ router.get('/me', auth, async (req, res) => {
     );
 
     if (!profile) {
-      return res.status(400).json({ msg: 'There is no profile for this user' });
+      return res.status(400).json({ msg: 'No profile bio... click on edit to create one!' });
     }
 
     res.json(profile);

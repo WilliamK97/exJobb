@@ -203,7 +203,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
                   <span className={styles.numberOfLikes}>{item.likes.length}</span>
                 </span>
                 <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /><span className={styles.numberOfLikes}>{item.comments.length}</span></span>
-                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative"} : {display: 'none'}}>
+                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative", maxWidth: '170px'} : {display: 'none'}}>
                     <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
                     <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
                     {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }

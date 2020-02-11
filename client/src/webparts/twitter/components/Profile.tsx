@@ -4,7 +4,7 @@ import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import {FaRegCheckCircle} from "react-icons/fa";
+import {FaRegCheckCircle, FaCog} from "react-icons/fa";
 
 export interface ITwitterStateProfileScreen{
     token: any;
@@ -14,8 +14,14 @@ export interface ITwitterStateProfileScreen{
     valueTweet: any;
     tweet: any;
     allTweets: any;
-    //bio: any;
-    //errorMsg: any;
+    bio: any;
+    errorMsg: any;
+    displayBioInput:any;
+    bioValue: any;
+    createBioInfo: any;
+    displayArray: any;
+    commentValue: any;
+    newCommentInfo: any;
 }
 
 
@@ -32,31 +38,89 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         valueTweet: '',
         tweet: {},
         allTweets: [],
+        bio: {},
+        errorMsg: '',
+        displayBioInput: false,
+        bioValue: '',
+        createBioInfo: {},
+        displayArray: [1],
+        commentValue: '',
+        newCommentInfo: []
     };
   }
 
   public componentDidMount = () => {
       this.getUser();
       this.fetchAllTweets();
+      this.getMyProfile();
   }
 
-//   private getMyProfile = () => {
-//       fetch('https://local.william/api/profile/me', {
-//           method: 'GET',
-//           headers: {
-//              'x-auth-token': this.state.token 
-//           }
-//       }).then((res) => res.json())
-//       .then((data) => {
-//           this.setState({
-//               bio: data.bio,
-//               //errorMsg: data.msg == undefined ? "" : data.msg
-//           })
-//       })
-//       .catch((err) => {
-//           console.log(err + "error in getMyProfile()");
-//       })
-//   }
+  public displayCommentInput = (id: any) => {
+      console.log(id);
+      var tweetId = id
+      this.state.displayArray.push(tweetId);
+      console.log(this.state.displayArray)
+      this.setState({
+    });
+  } 
+
+  private handleChangeComment = (event: any):void => {
+    this.setState({
+        commentValue: event.target.value
+    });
+  }
+
+  public hideCommentInput = (id: any) => {
+      console.log("clicked id ",id);
+      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id)
+      console.log("find array index of id")
+      console.log(indexInTweetArray)
+      this.state.displayArray.splice(indexInTweetArray);
+      this.setState({
+    });
+    console.log(this.state.displayArray)
+  }
+
+  public showEditBio = () => {    
+      console.log("show input");
+      this.setState({
+          displayBioInput: true
+    });
+  } 
+
+  public hideEditBio = (id: any) => {
+      console.log("hide input");
+      this.setState({
+          displayBioInput: false
+    });
+  }
+
+  private handleChangeBio = (event: any):void => {
+    this.setState({
+        bioValue: event.target.value
+    });
+  }
+
+  private getMyProfile = async () => {
+      let result;
+      await fetch('https://local.william/api/profile/me', {
+          method: 'GET',
+          headers: {
+             'x-auth-token': this.state.token 
+          }
+      }).then((res) => res.json())
+      .then((data) => {
+          this.setState({
+              bio: data,
+              errorMsg: data.msg == undefined ? "" : data.msg
+          })
+          result = data;
+      })
+      .catch((err) => {
+          console.log(err + "error in getMyProfile()");
+      })
+      return result;
+  }
 
   private createTweet = (e: any) => {
     e.preventDefault();
@@ -110,17 +174,14 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
     });
   }
 
-  //create bio
-  //see bio
-
   //see your own tweets'
   private fetchAllTweets = async () => {
     let result;
     await fetch('https://local.william/api/tweets/all' , {
     method: 'GET',
     headers: {
-    'x-auth-token': this.state.token
-    }
+        'x-auth-token': this.state.token
+        }
     })
     .then((res) => res.json())
         .then((data) => {
@@ -135,25 +196,77 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
      return result;
     }
 
+    private createBio = () => {
+        fetch('https://local.william/api/profile', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': this.state.token
+            },
+            body: JSON.stringify({
+            bio: this.state.bioValue
+        }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            this.getMyProfile().then(()=> {
+                this.setState({
+                createBioInfo: data,
+                bioValue: '',
+                displayBioInput: false
+            })
+            }) 
+        })
+        .catch((err) => {
+            console.log(err + "error in createBio()")
+        })
+    }
+
+    private commentOnTweet = (id: any):void => {
+        fetch('https://local.william/api/tweets/comment/' + id , {
+        method: 'POST',
+        headers: {
+            'x-auth-token': this.state.token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            text: this.state.commentValue
+        }),
+        }).then((res) => res.json())
+        .then((data) => {
+        console.log('hej from commentOnTweet()', data);
+        this.fetchAllTweets().then(() => {
+            console.log("fetched new tweets from commentOnTweet()")
+            this.setState({
+                    newCommentInfo: data
+                });
+        })
+        })
+        .catch((err) => {
+        console.log(err + "error in commentOnTweet()")
+        })
+  } 
+
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    console.log("tweet u created", this.state.tweet);
-    console.log("valueTweet", this.state.valueTweet);
-    console.log("current user", this.state.user);
-    console.log("all tweets", this.state.allTweets);
+    var noProfileBio = this.state.errorMsg.length == 0
+     ? ""
+     : <div>{this.state.errorMsg}<FaCog onClick={this.showEditBio} className={styles.edit}/></div>
 
-    // var renderProfileBio = this.state.bio == null || this.state.bio == undefined
-    // ? <p>Loading bio</p> 
-    // :   <div className={styles.bio}>
-    //         <p>{this.state.bio}</p>
-    //     </div>
+    var profileBio = this.state.bio == undefined || this.state.bio == null || this.state.bio.length == 0 
+    ? ""
+    : <h4>{this.state.bio.bio}</h4>
 
     var user = this.state.user == null || this.state.user == undefined
         ? <p>Loading User</p>
         : <div className={styles.user}>
             <img className={styles.userImg} src={this.state.user.avatar} />
             <h2>Hi {this.state.user.name}</h2>
+            {noProfileBio}
+            {profileBio}
+            {this.state.displayBioInput == true ? <div><input className={styles.bioInput} onChange={this.handleChangeBio} value={this.state.bioValue} type="text" placeholder="write a bio"/><IoMdCloseCircleOutline className={styles.closeBioInput} onClick={this.hideEditBio}/></div>: ""}
+            {this.state.bioValue == 0 ? "" : <input className={styles.submitBio} type="button" value="create" onClick={this.createBio}/>}
             <p>{this.state.user.email}</p>
             <p>Number of users you follow: {this.state.following.length} </p>
             <p>Number of followers: {this.state.followers.length} </p>
@@ -170,10 +283,19 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
                 <span>
                     <FaRegHeart className={styles.likeButton}/>
                     <span className={styles.numberOfLikes}>{item.likes.length}</span>
-                    <FaRegComment className={styles.commentButton}/>
+                    <FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)}/>
                     <span className={styles.numberOfLikes}>{item.comments.length}</span>
                 </span>
+                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative", maxWidth: '170px'} : {display: 'none'}}>
+                    <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
+                    <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
+                    {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }
+                </span>
                 <span className={styles.date}>{item.date.slice(0,10)}</span>
+
+                <div style={this.state.displayArray.find(id => id == item._id) ? {display:'block'} : {display: 'none'}}>
+                  {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
+                </div>
             </div>
         : console.log("inte din tweet");
     });
@@ -185,7 +307,6 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         <div className={styles.ProfileContainer}>
             <hr />
             {user}
-
             <form className={styles.tweetForm} onSubmit={this.createTweet}>
               <div>
                 <h4>Tweet something</h4>
