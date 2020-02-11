@@ -160,7 +160,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     : this.state.searchFilter.map((item) => {
         return (
           //om item.id = currentUser.id display none
-            <div className={styles.oneUser}>
+            <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>
               <img className={styles.allUsersImg} src={item.avatar} />
               <span className={styles.allUserNames}>{item.name}</span>    
               {item.followers.find(id => id.user == this.state.loggedInUser._id) ? <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
