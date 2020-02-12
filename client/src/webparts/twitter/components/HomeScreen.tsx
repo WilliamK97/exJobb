@@ -48,22 +48,22 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
 
   public displayCommentInput = (id: any) => {
       console.log(id);
-      var tweetId = id
+      var tweetId = id;
       this.state.displayArray.push(tweetId);
-      console.log(this.state.displayArray)
+      console.log(this.state.displayArray);
       this.setState({
     });
   } 
 
   public hideCommentInput = (id: any) => {
       console.log("clicked id ",id);
-      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id)
-      console.log("find array index of id")
-      console.log(indexInTweetArray)
+      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id);
+      console.log("find array index of id");
+      console.log(indexInTweetArray);
       this.state.displayArray.splice(indexInTweetArray);
       this.setState({
     });
-    console.log(this.state.displayArray)
+    console.log(this.state.displayArray);
   }
 
   private handleChangeComment = (event: any):void => {
@@ -119,11 +119,11 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
             .then((data) => {
             console.log('hej from likeTweet()', data);
             this.fetchTweetsFromPeopleYouFollow().then(() => {
-              console.log("fetched new tweets from liketweet()")
+              console.log("fetched new tweets from liketweet()");
               this.setState({
                 likeInfo: data
             });
-            })    
+            }) ;   
         })
         .catch((error) => {
             console.error(error + " error in likeTweet()");
@@ -140,11 +140,11 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
             .then((data) => {
             console.log('hej from unLikeTweet()', data);
             this.fetchTweetsFromPeopleYouFollow().then(() => {
-              console.log("fetched new tweets from unLiketweet()")
+              console.log("fetched new tweets from unLiketweet()");
               this.setState({
                 unLikeInfo: data
             });
-            })    
+            });
         })
         .catch((error) => {
             console.error(error + " error in unLikeTweet()");
@@ -165,15 +165,16 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
     .then((data) => {
       console.log('hej from commentOnTweet()', data);
       this.fetchTweetsFromPeopleYouFollow().then(() => {
-        console.log("fetched new tweets from commentOnTweet()")
+        console.log("fetched new tweets from commentOnTweet()");
         this.setState({
-                newCommentInfo: data
+                newCommentInfo: data,
+                commentValue: ''
             });
-      })
+      });
     })
     .catch((err) => {
-      console.log(err + "error in commentOnTweet()")
-    })
+      console.log(err + "error in commentOnTweet()");
+    });
   } 
 
   public render(): React.ReactElement<ITwitterProps> {

@@ -87,8 +87,9 @@
         border-radius: 20px;
         padding: 0.5rem 1rem;
         color: #fff;
-        width: 90%;
+        width: 100%;
         margin: 1rem auto;
+        margin-bottom: 0;
 
         .commentName{
           position: relative;
@@ -120,6 +121,7 @@
       }
       .text{
         margin: 18px 0px;
+        font-weight: 400;
       }
       .userName{
         margin-left: 0.8rem;
@@ -387,6 +389,7 @@
 
       .text{
         margin: 18px;
+        font-weight: 400;
       }
 
       .commentSection{
@@ -394,8 +397,9 @@
         border-radius: 20px;
         padding: 0.5rem 1rem;
         color: #fff;
-        width: 90%;
+        width: 100%;
         margin: 1rem auto;
+        margin-bottom: 0;
 
         .commentName{
           position: relative;
@@ -458,6 +462,7 @@
       }
       .text{
         margin: 18px 0px;
+        font-weight: 400;
       }
       .likeButton{
         width: 25px;

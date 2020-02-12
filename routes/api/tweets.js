@@ -2,11 +2,37 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator/check');
 const auth = require('../../middleware/auth');
+const multer = require('multer');
 
 const Tweet = require('../../models/Tweet');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename: function(req, file, cb) {
+        const now = new Date().toISOString(); const date = now.replace(/:/g, '-'); cb(null, date + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 // POST api/tweets
 // Create a tweet
@@ -268,5 +294,28 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// POST api/tweets/image
+// post image on tweet
+// Private
+// router.post('/image', auth, upload.single('tweetImage'), (req, res) => {
+//   const imgTweet = new Tweet({
+//     tweetImage: req.file.path
+//   });
+//   imgTweet
+//   .save()
+//   .then(result => {
+//     console.log(result);
+//     res.status(201).json({
+//       message: "image posted successfully"
+//     });
+//   })
+//   .catch(err => {
+//     console.log(err);
+//     res.status(500).json({
+//       error: err
+//     });
+//   });
+// });
 
 module.exports = router;

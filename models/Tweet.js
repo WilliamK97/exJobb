@@ -16,7 +16,7 @@ const TweetSchema = new Schema({
   avatar: {
     type: String
   },
-  file: {
+  tweetImage: {
     type: String
   },
   likes: [

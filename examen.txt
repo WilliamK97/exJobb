@@ -1,3 +1,4 @@
 när man skiver en comment ska det inte komma upp i alla andra comment inputs
 
+bilder, backend
 

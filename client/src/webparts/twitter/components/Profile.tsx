@@ -57,9 +57,9 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   public displayCommentInput = (id: any) => {
       console.log(id);
-      var tweetId = id
+      var tweetId = id;
       this.state.displayArray.push(tweetId);
-      console.log(this.state.displayArray)
+      console.log(this.state.displayArray);
       this.setState({
     });
   } 
@@ -72,13 +72,13 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   public hideCommentInput = (id: any) => {
       console.log("clicked id ",id);
-      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id)
-      console.log("find array index of id")
-      console.log(indexInTweetArray)
+      let indexInTweetArray = this.state.displayArray.findIndex(item => item == id);
+      console.log("find array index of id");
+      console.log(indexInTweetArray);
       this.state.displayArray.splice(indexInTweetArray);
       this.setState({
     });
-    console.log(this.state.displayArray)
+    console.log(this.state.displayArray);
   }
 
   public showEditBio = () => {    
@@ -113,12 +113,12 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
           this.setState({
               bio: data,
               errorMsg: data.msg == undefined ? "" : data.msg
-          })
+          });
           result = data;
       })
       .catch((err) => {
           console.log(err + "error in getMyProfile()");
-      })
+      });
       return result;
   }
 
@@ -214,12 +214,12 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
                 createBioInfo: data,
                 bioValue: '',
                 displayBioInput: false
-            })
-            }) 
+            });
+            });
         })
         .catch((err) => {
-            console.log(err + "error in createBio()")
-        })
+            console.log(err + "error in createBio()");
+        });
     }
 
     private commentOnTweet = (id: any):void => {
@@ -236,14 +236,15 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         .then((data) => {
         console.log('hej from commentOnTweet()', data);
         this.fetchAllTweets().then(() => {
-            console.log("fetched new tweets from commentOnTweet()")
+            console.log("fetched new tweets from commentOnTweet()");
             this.setState({
-                    newCommentInfo: data
+                    newCommentInfo: data,
+                    commentValue: ''
                 });
-        })
+        });
         })
         .catch((err) => {
-        console.log(err + "error in commentOnTweet()")
+        console.log(err + "error in commentOnTweet()");
         })
   } 
 
@@ -256,7 +257,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
     var profileBio = this.state.bio == undefined || this.state.bio == null || this.state.bio.length == 0 
     ? ""
-    : <h4>{this.state.bio.bio}</h4>
+    : <h4>{this.state.bio.bio}</h4>;
 
     var user = this.state.user == null || this.state.user == undefined
         ? <p>Loading User</p>
