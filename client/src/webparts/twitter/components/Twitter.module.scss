@@ -203,6 +203,13 @@
     margin: 0px auto;
     text-align: center;
 
+    .displayNone{
+      display: none;
+    }
+    .displayBlock{
+      color: red;
+    }
+
     h1{
       font-size: 3rem;
     }
@@ -219,6 +226,18 @@
     }
 
     .logout{
+      color: gray;
+      text-decoration: none;
+      padding: 5px;
+      background-color: white;
+      margin: 0 5px 0 5px;
+      font-size: 1rem;
+      padding: 5px 10px;
+      border-radius: 12px;
+      border: none;
+    }
+
+    .menuButtons{
       color: gray;
       text-decoration: none;
       padding: 5px;

@@ -4,7 +4,6 @@ import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import Login from "./Login";
 import Register from "./Register";
-import { Route, BrowserRouter, Link } from 'react-router-dom';
 import HomeScreen from "./HomeScreen";
 import Search from "./Search";
 import Profile from "./Profile";
@@ -12,6 +11,12 @@ import Profile from "./Profile";
 export interface ITwitterStateWelcomeScreen{
   tokenFromLocalStorage: any;
   dummy: any;
+  pageArray: any;
+  showLogin: any;
+  showRegister: any;
+  showHome: any;
+  showSearch: any;
+  showProfile: any;
 }
 
 export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitterStateWelcomeScreen,  {}> {
@@ -21,6 +26,12 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
     this.state = {
       tokenFromLocalStorage: '',
       dummy: '',
+      showLogin: false,
+      showRegister: false,
+      showHome: false,
+      showSearch: false,
+      showProfile: false,
+      pageArray: ["welcome","login","register","home","search","profile"]
     };
   }
 
@@ -45,38 +56,75 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
 
   private logout = () => {
       this.setState({
-          tokenFromLocalStorage: ''
+          tokenFromLocalStorage: '',
+          showHome: false,
+          showProfile: false,
+          showSearch: false
       });
 
       localStorage.removeItem('token');
       console.log("logout");
   }
 
+  private displayHome = () => {
+    this.setState({
+      showHome: true,
+      showProfile: false,
+      showSearch: false
+    })
+  }
+  private displaySearch = () => {
+    this.setState({
+      showHome: false,
+      showProfile: false,
+      showSearch: true
+    })
+  }
+  private displayProfile = () => {
+    this.setState({
+      showHome: false,
+      showProfile: true,
+      showSearch: false
+    })
+  }
+  private displayLogin = () => {
+    this.setState({
+      showLogin: true,
+      showRegister: false,
+    })
+  }
+  private displayRegister = () => {
+    this.setState({
+      showLogin: false,
+      showRegister: true,
+    })
+  }
+
   public render(): React.ReactElement<ITwitterProps> {
 
     var homeScreen = this.state.tokenFromLocalStorage == null || this.state.tokenFromLocalStorage.length == 0 || this.state.tokenFromLocalStorage == undefined
     ? <>
-        <Link Component={Login} exact to="/login">Login</Link>
-        <Link Component={Register} exact to="/register">Create account</Link>
+        <button className={styles.menuButtons} onClick={this.displayLogin}>Login</button>
+        <button className={styles.menuButtons} onClick={this.displayRegister}>Register</button>
 
-        <Route exact path='/login' render={(props) => <Login {...props} loginCallback={this.loginCallback} />} />
-        <Route exact path='/register' component={Register} /> 
+        <div className={ this.state.showLogin == true ? styles.displayBlock : styles.displayNone}><Login loginCallback={this.loginCallback}/></div>
+        <div className={ this.state.showRegister == true ? styles.displayBlock : styles.displayNone}><Register/></div>
       </>
     : <> 
-        <Link Component={HomeScreen} exact to="/home">Home</Link>
-        <Link Component={Search} exact to="/search">Search</Link>
-        <Link Component={Profile} exact to="/profile">Profile</Link>
+        <button className={styles.menuButtons} onClick={this.displayHome}>Home</button>
+        <button className={styles.menuButtons} onClick={this.displaySearch}>Search</button>
+        <button className={styles.menuButtons} onClick={this.displayProfile}>Profile</button>
         <input onClick={this.logout} className={styles.logout} type="button" value="Logout" />
 
-        <Route exact path='/home' component={HomeScreen}/>
-        <Route exact path='/search' component={Search}/>
-        <Route exact path='/profile' component={Profile}/>
+        <div className={ this.state.showHome == true ? styles.displayBlock : styles.displayNone}><HomeScreen displayHomeScreen={this.state.showHome}/></div>
+        <div className={ this.state.showSearch == true ? styles.displayBlock : styles.displayNone}><Search displaySearchScreen={this.state.showSearch}/></div>
+        <div className={ this.state.showProfile == true ? styles.displayBlock : styles.displayNone}><Profile displayProfileScreen={this.state.showProfile}/></div>
       </>;
 
 
 
     return (
-    <BrowserRouter>
+
       <div className={ styles.twitter }>
         <div className={styles.WelcomeScreenContainer}>
             <h1>Welcome to Fnitter</h1>
@@ -84,7 +132,6 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
 
         </div>
       </div>
-    </BrowserRouter>
     );
   }
 }

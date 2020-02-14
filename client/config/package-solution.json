@@ -1,13 +1,16 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "client-client-side-solution",
-    "id": "d2ee146d-f39e-4e93-924b-5e912f934fb6",
-    "version": "1.0.0.0",
+    "name": "test4",
+    "id": "d2ee146d-f39e-4e93-924b-5e912f934fb8",
+    "version": "4.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },
   "paths": {
-    "zippedPackage": "solution/client.sppkg"
+    "zippedPackage": "solution/client4.sppkg"
   }
 }
+
+
+// 6 ist för 7 på id för gamla id

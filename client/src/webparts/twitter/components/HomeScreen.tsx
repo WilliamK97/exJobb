@@ -41,9 +41,18 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
     };
   }
 
-  public componentDidMount = () => {
+  // public componentDidMount = () => {
+  //   console.log("component did show home");
+  //   this.getUser();
+  //   this.fetchTweetsFromPeopleYouFollow();  
+  // }
+
+  public componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.displayHomeScreen !== this.props.displayHomeScreen && this.props.displayHomeScreen == true) {
+      console.log("component did show and update home");
       this.getUser();
       this.fetchTweetsFromPeopleYouFollow();
+    }
   }
 
   public displayCommentInput = (id: any) => {
@@ -90,6 +99,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   }
 
   private fetchTweetsFromPeopleYouFollow = async () => {
+    console.log("fetching tweets from people u follow from HomeScreen !!!!!!");
     let result;
     await fetch('https://local.william/api/tweets', {
       method: 'GET',
@@ -179,7 +189,11 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    console.log(this.state.commentValue);
+    if (this.props.displayHomeScreen) {
+      console.log("home screen is now showing")
+    }else{
+      console.log("homescreen is now display: none")
+    }
 
     var user = this.state.user == null || this.state.user == undefined
     ? <p>Loading User</p>
@@ -189,7 +203,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
     </div>;
 
     var tweets = this.state.tweets == null || this.state.tweets == undefined || this.state.tweets.length == 0
-    ? <h4 className={styles.loadingTweets}>Loading tweets</h4>
+    ? <h5 className={styles.loadingTweets}>Loading tweets (or no tweets from your followers)</h5>
     : this.state.tweets.map((subarray) => {
         return subarray.map((item) => {
             return (

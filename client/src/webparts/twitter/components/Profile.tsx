@@ -49,10 +49,13 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
     };
   }
 
-  public componentDidMount = () => {
+  public componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.displayProfileScreen !== this.props.displayProfileScreen && this.props.displayProfileScreen == true ) {
+      console.log("component did mount and update profile");
       this.getUser();
       this.fetchAllTweets();
       this.getMyProfile();
+    }
   }
 
   public displayCommentInput = (id: any) => {
@@ -139,7 +142,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         this.fetchAllTweets().then(() => {
             console.log("fetched new tweets from createTweet()");
             this.setState({
-                tweet: data
+                tweet: data,
+                valueTweet: ''
             });
         });
         })
@@ -251,6 +255,12 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   public render(): React.ReactElement<ITwitterProps> {
 
+    if (this.props.displayProfileScreen) {
+    console.log("profile screen is now showing")
+    }else{
+      console.log("profileScreen is now display: none")
+    }
+
     var noProfileBio = this.state.errorMsg.length == 0
      ? ""
      : <div>{this.state.errorMsg}<FaCog onClick={this.showEditBio} className={styles.edit}/></div>
@@ -298,7 +308,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
                   {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
                 </div>
             </div>
-        : console.log("inte din tweet");
+        : "";
     });
 
     

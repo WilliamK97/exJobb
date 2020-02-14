@@ -11,6 +11,7 @@ export interface ITwitterState{
     loggedInUser: any;
     followUserMsg: any;
     unFollowUserMsg: any;
+    disableButtonId: any;
 }
 
 
@@ -26,25 +27,31 @@ constructor(props:ITwitterProps, state: ITwitterState) {
       searchFilter: [],
       loggedInUser: {},
       followUserMsg: '',
-      unFollowUserMsg: ''
+      unFollowUserMsg: '',
+      disableButtonId: undefined,
+
     };
   }
 
-  
   private handleChangeSearch = (event: any):void => {
     this.setState({
         searchValue: event.target.value
     });
   }
 
-  public componentDidMount = () => {
-    this.getAllUsers();
-    this.getLoggedInUser();
-  }
+  // public componentDidMount = () => {
+  //   console.log("component did mount search");
+  //   this.getAllUsers();
+  //   this.getLoggedInUser();
+  // }
 
-  public componentDidUpdate = () => {
-    console.log("component did update.. searchfilter state: ");
-    console.log(this.state.searchFilter);
+  public componentDidUpdate = (prevProps, prevState) => {
+    //lägg in && prevProps.displaySearchScreen !== this.props.displaySearchScreen
+    if (prevProps.displaySearchScreen !== this.props.displaySearchScreen && this.props.displaySearchScreen == true) {
+      console.log("component did mount search");
+      this.getAllUsers();
+      this.getLoggedInUser();
+    }
   }
 
   // om current logged in id är lika med någon users followes id så ska det stå unfollow
@@ -78,7 +85,8 @@ constructor(props:ITwitterProps, state: ITwitterState) {
           console.log('response from users/all', data);
         this.setState({
                 allUsers: data,
-                searchFilter: data
+                searchFilter: data,
+
             });
             result = data;
         })
@@ -105,7 +113,9 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   //follow fetch
 
-  private followUser = (id: any) => {
+  private followUser = async (id: any) => {
+    await this.disablePerson(id)
+    console.log(this.state.disableButtonId);
     console.log("clicked on follow");
     fetch('https://local.william/api/users/follow/' + id, {
       method: 'PUT',
@@ -118,7 +128,8 @@ constructor(props:ITwitterProps, state: ITwitterState) {
           this.getAllUsers().then(() => {
             console.log("fetched new users from followUser()");
             this.setState({
-                followUserMsg: data
+                followUserMsg: data,
+                disableButtonId: undefined
             });
           });  
         })
@@ -127,8 +138,16 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     });
   }
 
+  private disablePerson = (id: any) => {
+    this.setState({
+      disableButtonId : id
+    });
+  }
+
   //unfollow fetch
-  private unFollowUser = (id: any) => {
+  private unFollowUser = async (id: any) => {
+    await this.disablePerson(id)
+    console.log(this.state.disableButtonId);
     console.log("clicked on unfollow");
     fetch('https://local.william/api/users/unfollow/' + id, {
       method: 'PUT',
@@ -137,16 +156,15 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }
     }).then((response) => response.json())
         .then((data) => {
-          console.log(1);
-         
+          console.log(1);        
           this.getAllUsers().then(() => {
             console.log(3);
             console.log(this.state.searchFilter);
             this.setState({
-                unFollowUserMsg: data
+                unFollowUserMsg: data,
+                disableButtonId: undefined
             });
           });
-          
         })
         .catch((error) => {
             console.error(error + " error in unFollowUser()");
@@ -154,6 +172,14 @@ constructor(props:ITwitterProps, state: ITwitterState) {
   }
 
   public render(): React.ReactElement<ITwitterProps> {
+
+    console.log(this.state.unFollowUserMsg.msg);
+
+    if (this.props.displaySearchScreen) {
+      console.log("search screen is now showing")
+    }else{
+      console.log("searchScreen is now display: none")
+    }
 
     var renderSearchedUsersOrAllUsers = this.state.searchFilter == null || this.state.searchFilter.length == 0 || this.state.searchFilter == undefined 
     ? <p>Loading all users </p>
@@ -163,7 +189,11 @@ constructor(props:ITwitterProps, state: ITwitterState) {
             <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>
               <img className={styles.allUsersImg} src={item.avatar} />
               <span className={styles.allUserNames}>{item.name}</span>    
-              {item.followers.find(id => id.user == this.state.loggedInUser._id) ? <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
+              {console.log(this.state.searchFilter)}
+              {item.followers.find(id => id.user == this.state.loggedInUser._id) ? console.log("current user är hittad i denna users followers") : console.log("current user är inte hittad i danna users followers")}
+              {item.followers.find(id => id.user == this.state.loggedInUser._id) 
+              ? this.state.disableButtonId == item._id ? <input disabled onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" />
+              : this.state.disableButtonId == item._id ? <input disabled onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
             </div>
         );
     });
@@ -175,7 +205,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
             <h2>Search Users</h2>
             
             <form onSubmit={this.handleSearch}>
-                <input id="search" value={this.state.searchValue} onChange={this.handleChangeSearch} className={styles.searchInput} type="search" placeholder="Search"/>
+                <input name="testtest" id="search" value={this.state.searchValue} onChange={this.handleChangeSearch} className={styles.searchInput} type="text" placeholder="Search"/>
                 <div>
                     <input className={styles.searchButton} type="submit" value="Search" />
                 </div>
