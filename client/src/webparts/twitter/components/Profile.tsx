@@ -22,6 +22,7 @@ export interface ITwitterStateProfileScreen{
     displayArray: any;
     commentValue: any;
     newCommentInfo: any;
+    valueTweetImg: any;
 }
 
 
@@ -45,7 +46,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         createBioInfo: {},
         displayArray: [1],
         commentValue: '',
-        newCommentInfo: []
+        newCommentInfo: [],
+        valueTweetImg: ''
     };
   }
 
@@ -134,7 +136,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         'x-auth-token': this.state.token
     },
     body: JSON.stringify({
-        text: this.state.valueTweet
+        text: this.state.valueTweet,
+        tweetImage: this.state.valueTweetImg
     }),
     }).then((response) => response.json())
         .then((data) => {
@@ -143,7 +146,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
             console.log("fetched new tweets from createTweet()");
             this.setState({
                 tweet: data,
-                valueTweet: ''
+                valueTweet: '',
+                valueTweetImg: ''
             });
         });
         })
@@ -155,6 +159,11 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
   private handleChangeTweet = (event: any):void => {
     this.setState({
       valueTweet: event.target.value
+    });
+  } 
+  private handleChangeTweetImg = (event: any):void => {
+    this.setState({
+      valueTweetImg: event.target.value
     });
   } 
 
@@ -261,6 +270,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
       console.log("profileScreen is now display: none")
     }
 
+    console.log(this.state.allTweets);
+
     var noProfileBio = this.state.errorMsg.length == 0
      ? ""
      : <div>{this.state.errorMsg}<FaCog onClick={this.showEditBio} className={styles.edit}/></div>
@@ -290,7 +301,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
         ?   <div className={styles.yourTweets}>
                 <img className={styles.img} src={item.avatar} />
                 <span className={styles.name}>{item.name}</span><br/><br/><hr/>
-                <p className={styles.text}>{item.text}</p><br />
+                <p className={styles.text}>{item.text}</p>
+                <img className={styles.imgTweet} src={item.tweetImage} />
                 <span>
                     <FaRegHeart className={styles.likeButton}/>
                     <span className={styles.numberOfLikes}>{item.likes.length}</span>
@@ -322,6 +334,8 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
               <div>
                 <h4>Tweet something</h4>
                 <input className={styles.tweetInput} type="text" name="tweet" value={this.state.valueTweet} onChange={this.handleChangeTweet} /> 
+                <p className={styles.tweetInputImgText}>Add picture or GIF url (optional)</p>
+                <input className={styles.tweetInputImg} type="text" name="tweetPicUrl" value={this.state.valueTweetImg} onChange={this.handleChangeTweetImg} /> 
               </div>
               <br/>
               <input className={styles.submitButton} type="submit" value="Tweet" />

@@ -113,6 +113,10 @@
         width: 12%;
         border-radius: 50%;
       }
+      .imgTweet{
+        width: 100%;
+        margin-bottom: 1rem;
+      }
       .twitterLogo{
         width: 20px;
       }
@@ -383,6 +387,18 @@
         padding-left: 1rem;
         padding-right: 1rem;
       }
+      .tweetInputImgText{
+        margin-top: 1rem;
+      }
+      .tweetInputImg{
+        color: #000;
+        border: none;
+        height: 2rem;
+        border-radius: 20px;
+        width: 16rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
 
       .submitButton{
           color: grey;
@@ -435,6 +451,7 @@
           width: 9%;
           border-radius: 50%;
         }
+        
       }
 
       .closeButton{
@@ -475,6 +492,10 @@
         float: left;
         width: 12%;
         border-radius: 50%;
+      }
+      .imgTweet{
+        margin-bottom: 1rem;
+        width: 100%;
       }
       .name{
         margin-left: 0.8rem;

@@ -60,7 +60,8 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
+        tweetImage: req.body.tweetImage
       });
 
       const tweet = await newTweet.save();
