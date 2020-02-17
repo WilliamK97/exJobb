@@ -1,0 +1,6 @@
+{
+  "mongoURI": "mongodb+srv://william123:william123@twitter-lnljq.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken",
+  "githubClientId": "32250bec976a0c09cba7",
+  "githubSecret": "afe71d716a81137cd1c7d37d1efeda44744cb35e"
+}
