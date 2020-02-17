@@ -56,7 +56,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   // om current logged in id är lika med någon users followes id så ska det stå unfollow
   private getLoggedInUser = () => {
-    fetch('https://local.william/api/auth', {
+    fetch('https://fnitter.herokuapp.com/api/auth', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -74,7 +74,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   private getAllUsers = async () => {
       let result;
-      await fetch('https://local.william/api/users/all', {
+      await fetch('https://fnitter.herokuapp.com/api/users/all', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -117,7 +117,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     await this.disablePerson(id)
     console.log(this.state.disableButtonId);
     console.log("clicked on follow");
-    fetch('https://local.william/api/users/follow/' + id, {
+    fetch('https://fnitter.herokuapp.com/api/users/follow/' + id, {
       method: 'PUT',
       headers: {
       'x-auth-token': this.state.token
@@ -149,7 +149,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     await this.disablePerson(id)
     console.log(this.state.disableButtonId);
     console.log("clicked on unfollow");
-    fetch('https://local.william/api/users/unfollow/' + id, {
+    fetch('https://fnitter.herokuapp.com/api/users/unfollow/' + id, {
       method: 'PUT',
       headers: {
       'x-auth-token': this.state.token

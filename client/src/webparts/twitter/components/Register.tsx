@@ -45,7 +45,7 @@ constructor(props:ITwitterProps, state: ITwitterStateRegister) {
 
   private handleMakeAccount = (e: any) => {
     e.preventDefault();
-    fetch('https://local.william/api/users', {
+    fetch('https://fnitter.herokuapp.com/api/users', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

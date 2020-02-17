@@ -108,7 +108,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   private getMyProfile = async () => {
       let result;
-      await fetch('https://local.william/api/profile/me', {
+      await fetch('https://fnitter.herokuapp.com/api/profile/me', {
           method: 'GET',
           headers: {
              'x-auth-token': this.state.token 
@@ -129,7 +129,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   private createTweet = (e: any) => {
     e.preventDefault();
-    fetch('https://local.william/api/tweets', {
+    fetch('https://fnitter.herokuapp.com/api/tweets', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   //get logged in user
   private getUser = () => {
-    fetch('https://local.william/api/auth', {
+    fetch('https://fnitter.herokuapp.com/api/auth', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -190,7 +190,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
   //see your own tweets'
   private fetchAllTweets = async () => {
     let result;
-    await fetch('https://local.william/api/tweets/all' , {
+    await fetch('https://fnitter.herokuapp.com/api/tweets/all' , {
     method: 'GET',
     headers: {
         'x-auth-token': this.state.token
@@ -210,7 +210,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
     }
 
     private createBio = () => {
-        fetch('https://local.william/api/profile', {
+        fetch('https://fnitter.herokuapp.com/api/profile', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
     }
 
     private commentOnTweet = (id: any):void => {
-        fetch('https://local.william/api/tweets/comment/' + id , {
+        fetch('https://fnitter.herokuapp.com/api/tweets/comment/' + id , {
         method: 'POST',
         headers: {
             'x-auth-token': this.state.token,

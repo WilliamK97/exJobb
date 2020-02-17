@@ -50,7 +50,7 @@ export default class Login extends React.Component<ITwitterProps, ITwitterState,
 
   private handleLogin = (e: any) => {
     e.preventDefault();
-    fetch('https://local.william/api/auth', {
+    fetch('https://fnitter.herokuapp.com/api/auth', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

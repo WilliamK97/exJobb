@@ -82,7 +82,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   }
 
   private getUser = () => {
-    fetch('https://local.william/api/auth', {
+    fetch('https://fnitter.herokuapp.com/api/auth', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -101,7 +101,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   private fetchTweetsFromPeopleYouFollow = async () => {
     console.log("fetching tweets from people u follow from HomeScreen !!!!!!");
     let result;
-    await fetch('https://local.william/api/tweets', {
+    await fetch('https://fnitter.herokuapp.com/api/tweets', {
       method: 'GET',
       headers: {
       'x-auth-token': this.state.token
@@ -120,7 +120,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   }
 
   private likeTweet = (id:any):void => {
-      fetch('https://local.william/api/tweets/like/' + id , {
+      fetch('https://fnitter.herokuapp.com/api/tweets/like/' + id , {
           method: 'PUT',
           headers: {
             'x-auth-token': this.state.token
@@ -141,7 +141,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   }
 
   private unLikeTweet = (id:any):void => {
-      fetch('https://local.william/api/tweets/unlike/' + id , {
+      fetch('https://fnitter.herokuapp.com/api/tweets/unlike/' + id , {
           method: 'PUT',
           headers: {
             'x-auth-token': this.state.token
@@ -162,7 +162,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   }
 
   private commentOnTweet = (id: any):void => {
-    fetch('https://local.william/api/tweets/comment/' + id , {
+    fetch('https://fnitter.herokuapp.com/api/tweets/comment/' + id , {
       method: 'POST',
       headers: {
         'x-auth-token': this.state.token,
