@@ -6,7 +6,7 @@ import Login from "./Login";
 import Register from "./Register";
 import HomeScreen from "./HomeScreen";
 import Search from "./Search";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 
 export interface ITwitterStateWelcomeScreen{
   tokenFromLocalStorage: any;

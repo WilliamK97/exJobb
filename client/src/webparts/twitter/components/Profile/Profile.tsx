@@ -1,10 +1,13 @@
 import * as React from 'react';
-import styles from './Twitter.module.scss';
-import { ITwitterProps } from './ITwitterProps';
+import styles from '../Twitter.module.scss';
+import { ITwitterProps } from '../ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import {FaRegCheckCircle, FaCog} from "react-icons/fa";
+import UserView from "./UserView";
+import NewTweetView from "./NewTweetView";
+import YourTweetsView from "./YourTweetsView";
 
 export interface ITwitterStateProfileScreen{
     token: any;
@@ -264,84 +267,43 @@ constructor(props:ITwitterProps, state: ITwitterStateProfileScreen) {
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    if (this.props.displayProfileScreen) {
-    console.log("profile screen is now showing")
-    }else{
-      console.log("profileScreen is now display: none")
-    }
-
-    console.log(this.state.allTweets);
-
-    var noProfileBio = this.state.errorMsg.length == 0
-     ? ""
-     : <div>{this.state.errorMsg}<FaCog onClick={this.showEditBio} className={styles.edit}/></div>
-
-    var profileBio = this.state.bio == undefined || this.state.bio == null || this.state.bio.length == 0 
-    ? ""
-    : <h4>{this.state.bio.bio}</h4>;
-
-    var user = this.state.user == null || this.state.user == undefined
-        ? <p>Loading User</p>
-        : <div className={styles.user}>
-            <img className={styles.userImg} src={this.state.user.avatar} />
-            <h2>Hi {this.state.user.name}</h2>
-            {noProfileBio}
-            {profileBio}
-            {this.state.displayBioInput == true ? <div><input className={styles.bioInput} onChange={this.handleChangeBio} value={this.state.bioValue} type="text" placeholder="write a bio"/><IoMdCloseCircleOutline className={styles.closeBioInput} onClick={this.hideEditBio}/></div>: ""}
-            {this.state.bioValue == 0 ? "" : <input className={styles.submitBio} type="button" value="create" onClick={this.createBio}/>}
-            <p>{this.state.user.email}</p>
-            <p>Number of users you follow: {this.state.following.length} </p>
-            <p>Number of followers: {this.state.followers.length} </p>
-        </div>;
-
-    var renderYourTweets = this.state.allTweets.length == 0 || this.state.allTweets == null || this.state.allTweets == undefined 
-    ? <p>Loading your tweets (or no tweets)</p>
-    : this.state.allTweets.map(item => {
-        return item.user == this.state.user._id
-        ?   <div className={styles.yourTweets}>
-                <img className={styles.img} src={item.avatar} />
-                <span className={styles.name}>{item.name}</span><br/><br/><hr/>
-                <p className={styles.text}>{item.text}</p>
-                <img className={styles.imgTweet} src={item.tweetImage} />
-                <span>
-                    <FaRegHeart className={styles.likeButton}/>
-                    <span className={styles.numberOfLikes}>{item.likes.length}</span>
-                    <FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)}/>
-                    <span className={styles.numberOfLikes}>{item.comments.length}</span>
-                </span>
-                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative", maxWidth: '170px'} : {display: 'none'}}>
-                    <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
-                    <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
-                    {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }
-                </span>
-                <span className={styles.date}>{item.date.slice(0,10)}</span>
-
-                <div style={this.state.displayArray.find(id => id == item._id) ? {display:'block'} : {display: 'none'}}>
-                  {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
-                </div>
-            </div>
-        : "";
-    });
-
-    
-
     return (
       <div className={ styles.twitter }>
         <div className={styles.ProfileContainer}>
             <hr />
-            {user}
-            <form className={styles.tweetForm} onSubmit={this.createTweet}>
-              <div>
-                <h4>Tweet something</h4>
-                <input className={styles.tweetInput} type="text" name="tweet" value={this.state.valueTweet} onChange={this.handleChangeTweet} /> 
-                <p className={styles.tweetInputImgText}>Add picture or GIF url (optional)</p>
-                <input className={styles.tweetInputImg} type="text" name="tweetPicUrl" value={this.state.valueTweetImg} onChange={this.handleChangeTweetImg} /> 
-              </div>
-              <br/>
-              <input className={styles.submitButton} type="submit" value="Tweet" />
-            </form>
+        
+            <UserView 
+              user={this.state.user}
+              errorMsg={this.state.errorMsg}
+              bio={this.state.bio}
+              displayBioInput={this.state.displayBioInput}
+              handleChangeBio={this.handleChangeBio}
+              bioValue={this.state.bioValue}
+              hideEditBio={this.hideEditBio}
+              showEditBio={this.showEditBio}
+              createBio={this.createBio}
+              following={this.state.following}
+              followers={this.state.followers}
+            />
 
-            {renderYourTweets}
+            <NewTweetView 
+              createTweet={this.createTweet}
+              valueTweet={this.state.valueTweet}
+              handleChangeTweet={this.handleChangeTweet}
+              valueTweetImg={this.state.valueTweetImg}
+              handleChangeTweetImg={this.handleChangeTweetImg}
+            />
+
+            <YourTweetsView
+              allTweets={this.state.allTweets}
+              user={this.state.user}
+              displayCommentInput={this.displayCommentInput}
+              displayArray={this.state.displayArray}
+              commentValue={this.state.commentValue}
+              handleChangeComment={this.handleChangeComment}
+              hideCommentInput={this.hideCommentInput}
+              commentOnTweet={this.commentOnTweet}
+            />
 
         </div>
       </div>
