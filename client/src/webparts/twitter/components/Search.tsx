@@ -173,8 +173,6 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    console.log(this.state.unFollowUserMsg.msg);
-
     if (this.props.displaySearchScreen) {
       console.log("search screen is now showing")
     }else{
@@ -188,9 +186,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
           //om item.id = currentUser.id display none
             <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>
               <img className={styles.allUsersImg} src={item.avatar} />
-              <span className={styles.allUserNames}>{item.name}</span>    
-              {console.log(this.state.searchFilter)}
-              {item.followers.find(id => id.user == this.state.loggedInUser._id) ? console.log("current user är hittad i denna users followers") : console.log("current user är inte hittad i danna users followers")}
+              <span className={styles.allUserNames}>{item.name}</span> 
               {item.followers.find(id => id.user == this.state.loggedInUser._id) 
               ? this.state.disableButtonId == item._id ? <input disabled onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" />
               : this.state.disableButtonId == item._id ? <input disabled onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }

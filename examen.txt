@@ -1,7 +1,5 @@
 när man skiver en comment ska det inte komma upp i alla andra comment inputs
 
+number om followers and number of followers i search
 
-
-
-
-bilder
+retweet
