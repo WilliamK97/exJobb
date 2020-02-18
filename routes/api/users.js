@@ -127,8 +127,8 @@ router.put('/follow/:id', auth, async (req, res) => {
 // Private
 router.put('/unfollow/:id', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    const loggenInUser = await User.findById(req.user.id);
+    let user = await User.findById(req.params.id);
+    let loggenInUser = await User.findById(req.user.id);
 
     // Check if the User has already been followed
     if (loggenInUser.following.filter(f => f.user.toString() === user.id).length === 0) {
@@ -136,20 +136,39 @@ router.put('/unfollow/:id', auth, async (req, res) => {
     }
 
     // Get remove index following
-    const removeIndex = loggenInUser.following
-      .map(f => f.user.toString())
-      .indexOf(user);
+    // const removeIndex = loggenInUser.following
+    //   .map(f => f.user.toString())
+    //   .indexOf(user);
+
+      // var i = 0;
+      // tempi = 0;
+      // loggenInUser.following.forEach(element => {
+      //   if(element.user.toString() === req.params.id.toString())
+      //   {
+      //     tempi = i;
+      //     console.log("found it")
+      //   }
+      //   i++;
+      // });
+      // console.log(tempi);
 
     // Get remove index followers
-    const removeIndex1 = user.followers
-    .map(f => f.user.toString())
-    .indexOf(loggenInUser);
+    // const removeIndex1 = user.followers
+    // .map(f => f.user.toString())
+    // .indexOf(loggenInUser);
+    
+    // console.log('Clicked user:',req.params.id,'Current user:',req.user.id )
+    console.log("loggenInUser.following Before:", loggenInUser.following.length)
+    loggenInUser.following = loggenInUser.following.filter(user => user.user.toString() !== req.params.id.toString());
+    console.log("loggenInUser.following after:", loggenInUser.following.length)
+    console.log("user.followers before ", user.followers.length)
+    user.followers = user.followers.filter(user => user.user.toString() !== req.user.id.toString());
+    console.log("user.followers after: ",user.followers.length)
+    //  user.followers.splice(removeIndex1, 1);
+    //  loggenInUser.following.splice(removeIndex, 1);
 
-    user.followers.splice(removeIndex1, 1);
-    loggenInUser.following.splice(removeIndex, 1);
-
-    await user.save();
-    await loggenInUser.save();
+     await user.save();
+     await loggenInUser.save();
 
     res.json(loggenInUser.following);
   } catch (err) {

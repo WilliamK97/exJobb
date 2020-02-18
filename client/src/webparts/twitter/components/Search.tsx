@@ -14,12 +14,15 @@ export interface ITwitterState{
     disableButtonId: any;
 }
 
+// var apiUrl =  "https://local.william/api/";
 
 export default class Search extends React.Component<ITwitterProps, ITwitterState,  {}> {
 
+// const apiUrl = "https://fnitter.herokuapp.com/api/";
+
 constructor(props:ITwitterProps, state: ITwitterState) {
     super(props);
-    var tokenLS = localStorage.getItem('token'); 
+    var tokenLS = localStorage.getItem('token');
     this.state = { 
       searchValue: '',
       token: tokenLS,
@@ -127,6 +130,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
           console.log('hej from followUser()', data);
           this.getAllUsers().then(() => {
             console.log("fetched new users from followUser()");
+            this.getLoggedInUser();
             this.setState({
                 followUserMsg: data,
                 disableButtonId: undefined
@@ -148,7 +152,7 @@ constructor(props:ITwitterProps, state: ITwitterState) {
   private unFollowUser = async (id: any) => {
     await this.disablePerson(id)
     console.log(this.state.disableButtonId);
-    console.log("clicked on unfollow");
+    console.log("clicked on unfollow",id);
     fetch('https://fnitter.herokuapp.com/api/users/unfollow/' + id, {
       method: 'PUT',
       headers: {
@@ -156,8 +160,9 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }
     }).then((response) => response.json())
         .then((data) => {
-          console.log(1);        
+          console.log(1);       
           this.getAllUsers().then(() => {
+            this.getLoggedInUser();
             console.log(3);
             console.log(this.state.searchFilter);
             this.setState({
@@ -182,12 +187,13 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     var renderSearchedUsersOrAllUsers = this.state.searchFilter == null || this.state.searchFilter.length == 0 || this.state.searchFilter == undefined 
     ? <p>Loading all users </p>
     : this.state.searchFilter.map((item) => {
+         console.log("Current user in listing:", item,'Logged in user:', this.state.loggedInUser)
         return (
           //om item.id = currentUser.id display none
             <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>
               <img className={styles.allUsersImg} src={item.avatar} />
               <span className={styles.allUserNames}>{item.name}</span> 
-              {item.followers.find(id => id.user == this.state.loggedInUser._id) 
+              {this.state.loggedInUser.following && this.state.loggedInUser.following.find(user => user.user === item._id) 
               ? this.state.disableButtonId == item._id ? <input disabled onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" />
               : this.state.disableButtonId == item._id ? <input disabled onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
             </div>
