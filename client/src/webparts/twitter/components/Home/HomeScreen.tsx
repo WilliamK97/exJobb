@@ -8,6 +8,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import {FaRegCheckCircle} from "react-icons/fa";
 import UserView from "./UserView";
 import TweetsView from "./TweetsView";
+// import { Tweet } from "../apiDataLayer/Tweet"
 
 export interface ITwitterStateHomeScreen{
     token: any;
@@ -28,6 +29,14 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   constructor(props:ITwitterProps, state: ITwitterStateHomeScreen) {
     super(props);
     let tokenFromLS = localStorage.getItem('token');
+
+
+    // let tweetclass = new Tweet();
+    // console.log(tweetclass);
+    // let renderTest = tweetclass.renderTweetsTest();
+    // console.log(renderTest);
+
+
     this.state = {
         token: tokenFromLS,
         user: {},
@@ -184,6 +193,7 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
   } 
 
   public render(): React.ReactElement<ITwitterProps> {
+
 
     return (
       <div className={ styles.twitter }>
