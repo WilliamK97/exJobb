@@ -1,11 +1,13 @@
 import * as React from 'react';
-import styles from './Twitter.module.scss';
-import { ITwitterProps } from './ITwitterProps';
+import styles from '../Twitter.module.scss';
+import { ITwitterProps } from '../ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import { Link, NavLink } from 'react-router-dom';
 import { FaRegComment, FaRegHeart } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import {FaRegCheckCircle} from "react-icons/fa";
+import UserView from "./UserView";
+import TweetsView from "./TweetsView";
 
 export interface ITwitterStateHomeScreen{
     token: any;
@@ -40,12 +42,6 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
         displayArray: [1]
     };
   }
-
-  // public componentDidMount = () => {
-  //   console.log("component did show home");
-  //   this.getUser();
-  //   this.fetchTweetsFromPeopleYouFollow();  
-  // }
 
   public componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.displayHomeScreen !== this.props.displayHomeScreen && this.props.displayHomeScreen == true) {
@@ -189,63 +185,28 @@ export default class HomeScreen extends React.Component<ITwitterProps, ITwitterS
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    if (this.props.displayHomeScreen) {
-      console.log("home screen is now showing")
-    }else{
-      console.log("homescreen is now display: none")
-    }
-
-    var user = this.state.user == null || this.state.user == undefined
-    ? <p>Loading User</p>
-    : <div className={styles.user}>
-        <img className={styles.userImg} src={this.state.user.avatar} />
-        <h2>Hi {this.state.user.name}</h2>
-    </div>;
-
-    var tweets = this.state.tweets == null || this.state.tweets == undefined || this.state.tweets.length == 0
-    ? <h5 className={styles.loadingTweets}>Loading tweets (or no tweets from your followers)</h5>
-    : this.state.tweets.map((subarray) => {
-        return subarray.map((item) => {
-            return (
-            <div className={styles.tweet}>
-                <img className={styles.img} src={item.avatar} />
-                <span className={styles.name}>{item.name}</span><br/>
-                <span className={styles.userName}>@{item.name}</span><br />
-                <hr />
-                <p className={styles.text}>{item.text}</p>
-                <img className={styles.imgTweet} src={item.tweetImage} />
-                <span>
-                  {item.likes.find(id => id.user == this.state.user._id) ? <span><FaRegHeart className={styles.unLikeButton} onClick={() => this.unLikeTweet(item._id)}/></span> : <span><FaRegHeart className={styles.likeButton} onClick={() => this.likeTweet(item._id)}/></span>} 
-                  <span className={styles.numberOfLikes}>{item.likes.length}</span>
-                </span>
-                <span><FaRegComment className={styles.commentButton} onClick={() => this.displayCommentInput(item._id)} /><span className={styles.numberOfLikes}>{item.comments.length}</span></span>
-                <span style={this.state.displayArray.find(id => id == item._id)  ? {display:'inline-block', position: "relative", maxWidth: '170px'} : {display: 'none'}}>
-                    <input value={this.state.commentValue} onChange={this.handleChangeComment} className={styles.commentInput} type="text" placeholder="New comment" />
-                    <IoMdCloseCircleOutline className={styles.closeButton} onClick={() => this.hideCommentInput(item._id)} />
-                    {this.state.commentValue == "" ? "" : <FaRegCheckCircle className={styles.submitComment} onClick={() => this.commentOnTweet(item._id)} /> }
-                </span>
-                <span className={styles.date}>{item.date.slice(0,10)}</span>
-
-
-                {/* ////////////////comment section//////////////// */}
-                <div style={this.state.displayArray.find(id => id == item._id) ? {display:'block'} : {display: 'none'}}>
-                  {item.comments.length == 0 ? "" : item.comments.map((item) => <div className={styles.commentSection}><img src={item.avatar} /><span className={styles.commentName}>{item.name}</span><br/><span className={styles.commentText}>{item.text}</span></div> )}
-                </div>
-            </div>
-            );
-        });
-    });
-
     return (
       <div className={ styles.twitter }>
         <div className={styles.HomeScreenContainer}>
             <hr/>
+            
             <div className={styles.user}>
-                {user}
+              <UserView user={this.state.user} />
             </div>
             <br/>
             <div className={styles.tweets}>
-                {tweets}
+              <TweetsView
+                tweets={this.state.tweets}
+                user={this.state.user}
+                unLikeTweet={this.unLikeTweet}
+                likeTweet={this.likeTweet}
+                displayCommentInput={this.displayCommentInput}
+                displayArray={this.state.displayArray}
+                commentValue={this.state.commentValue}
+                handleChangeComment={this.handleChangeComment}
+                hideCommentInput={this.hideCommentInput}
+                commentOnTweet={this.commentOnTweet}
+              />
             </div>
         </div>
       </div>

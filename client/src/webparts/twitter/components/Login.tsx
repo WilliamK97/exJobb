@@ -6,8 +6,6 @@ import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
 import Register from "./Register";
 import {Route, Link, BrowserRouter } from 'react-router-dom';
-import HomeScreen from "./HomeScreen";
-import WelcomeScreen from "./WelcomeScreen";
 
 export interface ITwitterState{
   valueEmail: any;

@@ -1,14 +1,14 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "henrik",
-    "id": "d2ee146d-f39e-4e93-924b-5e912f934fb1",
-    "version": "5.0.0.0",
+    "name": "william",
+    "id": "d2ee146d-f39e-4e93-924b-5e912f934fb2",
+    "version": "6.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },
   "paths": {
-    "zippedPackage": "solution/henrik.sppkg"
+    "zippedPackage": "solution/william.sppkg"
   }
 }
 

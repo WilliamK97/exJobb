@@ -2,6 +2,7 @@ import * as React from 'react';
 import styles from './Twitter.module.scss';
 import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+// import Tweet from "./../../api/tweet/tweet"
 
 export interface ITwitterState{
     searchValue: any;
@@ -57,7 +58,6 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     }
   }
 
-  // om current logged in id är lika med någon users followes id så ska det stå unfollow
   private getLoggedInUser = () => {
     fetch('https://fnitter.herokuapp.com/api/auth', {
       method: 'GET',
@@ -176,6 +176,8 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     });
   }
 
+  //clean, bundle --ship ,gulp package-solution --ship
+
   public render(): React.ReactElement<ITwitterProps> {
 
     if (this.props.displaySearchScreen) {
@@ -187,7 +189,6 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     var renderSearchedUsersOrAllUsers = this.state.searchFilter == null || this.state.searchFilter.length == 0 || this.state.searchFilter == undefined 
     ? <p>Loading all users </p>
     : this.state.searchFilter.map((item) => {
-         console.log("Current user in listing:", item,'Logged in user:', this.state.loggedInUser)
         return (
           //om item.id = currentUser.id display none
             <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>

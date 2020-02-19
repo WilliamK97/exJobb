@@ -4,7 +4,7 @@ import { ITwitterProps } from './ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import Login from "./Login";
 import Register from "./Register";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./Home/HomeScreen";
 import Search from "./Search";
 import Profile from "./Profile/Profile";
 
@@ -101,6 +101,7 @@ export default class WelcomeScreen extends React.Component<ITwitterProps, ITwitt
   }
 
   public render(): React.ReactElement<ITwitterProps> {
+
 
     var homeScreen = this.state.tokenFromLocalStorage == null || this.state.tokenFromLocalStorage.length == 0 || this.state.tokenFromLocalStorage == undefined
     ? <>
