@@ -1,8 +1,9 @@
 import * as React from 'react';
-import styles from './Twitter.module.scss';
-import { ITwitterProps } from './ITwitterProps';
+import styles from '../Twitter.module.scss';
+import { ITwitterProps } from '../ITwitterProps';
 import { escape } from '@microsoft/sp-lodash-subset';
-// import Tweet from "./../../api/tweet/tweet"
+import SearchUserView from "./SearchUserView"
+import AllUsersView from "./AllUsersView"
 
 export interface ITwitterState{
     searchValue: any;
@@ -43,11 +44,6 @@ constructor(props:ITwitterProps, state: ITwitterState) {
     });
   }
 
-  // public componentDidMount = () => {
-  //   console.log("component did mount search");
-  //   this.getAllUsers();
-  //   this.getLoggedInUser();
-  // }
 
   public componentDidUpdate = (prevProps, prevState) => {
     //lägg in && prevProps.displaySearchScreen !== this.props.displaySearchScreen
@@ -180,45 +176,28 @@ constructor(props:ITwitterProps, state: ITwitterState) {
 
   public render(): React.ReactElement<ITwitterProps> {
 
-    if (this.props.displaySearchScreen) {
-      console.log("search screen is now showing")
-    }else{
-      console.log("searchScreen is now display: none")
-    }
-
-    var renderSearchedUsersOrAllUsers = this.state.searchFilter == null || this.state.searchFilter.length == 0 || this.state.searchFilter == undefined 
-    ? <p>Loading all users </p>
-    : this.state.searchFilter.map((item) => {
-        return (
-          //om item.id = currentUser.id display none
-            <div className={styles.oneUser} style={item._id == this.state.loggedInUser._id ? {display:'none'} : {display: 'block'} }>
-              <img className={styles.allUsersImg} src={item.avatar} />
-              <span className={styles.allUserNames}>{item.name}</span> 
-              {this.state.loggedInUser.following && this.state.loggedInUser.following.find(user => user.user === item._id) 
-              ? this.state.disableButtonId == item._id ? <input disabled onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" /> : <input onClick={() => this.unFollowUser(item._id)} className={styles.unfollowUser} type="button" value="Unfollow" />
-              : this.state.disableButtonId == item._id ? <input disabled onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> : <input onClick={() => this.followUser(item._id)} className={styles.followUser} type="button" value="Follow" /> }
-            </div>
-        );
-    });
-
     return (
       <div className={ styles.twitter }>
         <div className={styles.searchComponent}>
             <hr/>
             <h2>Search Users</h2>
-            
-            <form onSubmit={this.handleSearch}>
-                <input name="testtest" id="search" value={this.state.searchValue} onChange={this.handleChangeSearch} className={styles.searchInput} type="text" placeholder="Search"/>
-                <div>
-                    <input className={styles.searchButton} type="submit" value="Search" />
-                </div>
-            </form>
 
+            <SearchUserView
+              handleSearch={this.handleSearch}
+              searchValue={this.state.searchValue}
+              handleChangeSearch={this.handleChangeSearch}
+            />
+            
             <div className={styles.allUsers}>
             <h2>Users</h2>
-                {renderSearchedUsersOrAllUsers}
+              <AllUsersView
+                searchFilter={this.state.searchFilter}
+                loggedInUser={this.state.loggedInUser}
+                disableButtonId={this.state.disableButtonId}
+                unFollowUser={this.unFollowUser}
+                followUser={this.followUser}
+              />
             </div>
-
         </div>
       </div>
     );

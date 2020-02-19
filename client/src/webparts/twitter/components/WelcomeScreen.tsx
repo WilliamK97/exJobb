@@ -5,7 +5,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import Login from "./Login";
 import Register from "./Register";
 import HomeScreen from "./Home/HomeScreen";
-import Search from "./Search";
+import Search from "./Search/Search";
 import Profile from "./Profile/Profile";
 
 export interface ITwitterStateWelcomeScreen{
