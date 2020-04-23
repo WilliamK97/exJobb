@@ -1,6 +1,7 @@
-# exJobb
+# exJobb Twitter clone
 
-Twitter clone
+express REST Api med MongoDB koppling 
+React frontend
 
 
 npm i in /client and root
